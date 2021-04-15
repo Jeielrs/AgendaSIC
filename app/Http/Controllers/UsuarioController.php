@@ -14,7 +14,6 @@ class UsuarioController extends Controller
         $senha = $request->senha;
 
         $usuarios = Usuario::where('conta', '=', $conta)->where('senha', '=', $senha)->first();
-
         if(@$usuarios->id != null){ #@ para não dar warning de indefinido caso seja null
             @session_start();
             $_SESSION['id'] = $usuarios->id;

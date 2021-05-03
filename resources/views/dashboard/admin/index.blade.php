@@ -1,4 +1,4 @@
-@extends('layout.index')
+@extends('layouts.templateOne')
 @extends('navbar.adminMenu')
 
 </body>

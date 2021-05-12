@@ -2,7 +2,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#" style="color: #fffb00">
+    <a class="navbar-brand" href="/painel" style="color: #fffb00">
         <ion-icon name="calendar-outline"></ion-icon>
         Agenda SIC
     </a>  
@@ -47,11 +47,16 @@
                   <a class="dropdown-item" href="/veiculos/edit">Editar</a>
                   <a class="dropdown-item" href="/veiculos/create">Cadastrar</a>
                   <!--div class="dropdown-divider"></div-->
-                  <a class="dropdown-item" href="#">Cadastrar</a>
+                  <!--a class="dropdown-item" href="#">Cadastrar</a-->
                 </div>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
+            <li>
+              <a  href="#" class="nav-link active" data-toggle="modal" data-tt="tooltip" title="Versão" ata-placement="right" data-target="#modalsobre">
+                Sobre
+              </a>
+            </li>
             <li class="nav-item dropdown active">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{$_SESSION['nome']}}
@@ -63,3 +68,40 @@
           </ul>
     </div>
   </nav>
+
+  <!-- Modal Sobre -->
+  <div class="modal fade" id="modalsobre" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class='modal-header'>
+          <h3 class='modal-title' id='exampleModalLongTitle'>
+            SOBRE
+          </h3>
+          <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-dark">
+            <tr>
+              <th scope="row">Software: </th>
+              <th>AgendaSIC</th>
+            </tr>
+            <tr>
+              <th scope="row">Versão:  </th>
+              <th>1.0</th>
+            </tr>
+            <tr>
+              <th scope="row">Manual:  </th>
+              <th><a href="#"  target="blank" >Acessar</a></th>
+            </tr>
+            <tr>
+              <th scope="row">Suporte:</th>
+              <th><a href="mailto:ti@aferitec.com.br?subject=Dúvida na Agenda SIC">ti@aferitec.com.br</a> <br> (19)9 9921-6546</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fim Modal Sobre -->

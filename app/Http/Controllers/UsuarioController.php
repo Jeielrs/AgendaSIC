@@ -22,15 +22,15 @@ class UsuarioController extends Controller
             $_SESSION['nivel'] = $usuarios->nivel;
 
             if($_SESSION['nivel'] == 'admin'){
-                return view('dashboard.admin.index');
+                return view('painel.admin.index');
             }
             
             if ($_SESSION['nivel'] == 'manager') {
-                return view('dashboard.manager.index');
+                return view('painel.manager.index');
             }
             
             if ($_SESSION['nivel'] == 'user') {
-                return view('dashboard.user.index');
+                return view('painel.user.index');
             }
         } else {
             echo "<script language='javascript'>alert('Dados Incorretos')</script>";

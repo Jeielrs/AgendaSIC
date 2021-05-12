@@ -19,6 +19,16 @@
     <script src="{{ URL::asset('assets/datatables/datatables-demo.js') }}"></script>
     <!---->
     <link href="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <script language="JavaScript">    
+        //função do purpose
+        $(function () {
+        $('[data-toggle="popover"]').popover()
+        })
+        //função tolltip
+        $(function () {
+        $('[data-tt="tooltip"]').tooltip()
+        })
+    </script>
 </head>
 <body>
 @yield('content')    

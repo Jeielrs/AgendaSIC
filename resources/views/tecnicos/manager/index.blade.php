@@ -4,7 +4,16 @@
 @section('content')
   @include('navbar.managerMenu')
   <div class="container">
-  <h1>Técnicos</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="titulo-rota">Técnicos</h3>
+      </div>
+      <div class="col-md-6 text-right">
+          <a href="/tecnicos/create" type="button" class="mt-2 mb-2 btn-sm btn-success btn-inserir">Inserir Técnico</a>
+      </div>
+    </div>
+  </div>
+  <div class="container" id="datatable">
     <!-- DataTables Example -->
     <div class="card shadow mb-4">
       <div class="card-body">
@@ -12,6 +21,8 @@
           <table class="table table-sm table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
+                <th>Ações</th>
+                <th>ID</th>
                 <th class="dont-break" >Nome</th>
                 <th class="dont-break" >Nascimento</th>
                 <th class="dont-break" >RG</th>
@@ -32,19 +43,25 @@
             <tbody>
               @foreach($tecnicos as $tecnico)            
                 <tr>
+                  <td>
+                    <a href="{{route('tecnicos.show', $tecnico->id)}}"><i class="fas fa-eye text-primary"></i></a>
+                    <a href="{{route('tecnicos.edit', $tecnico->id)}}"><i class="fas fa-edit text-warning"></i></a>
+                    <a href="{{route('tecnicos.delete', $tecnico->id)}}"><i class="fas fa-trash-alt text-danger"></i><a
+                  </td>
+                  <td class="">{{$tecnico->id}}</td>
                   <td class="dont-break"><nobr>{{$tecnico->name}}</nobr></td>
-                  <td class="dont-break">{{$tecnico->birth}}</td>
-                  <td class="dont-break">{{$tecnico->rg}}</td>
-                  <td class="dont-break">{{$tecnico->cpf}}</td>
-                  <td class="dont-break">{{$tecnico->ctps}}</td>
-                  <td class="dont-break">{{$tecnico->cnh}}</td>
-                  <td class="dont-break">{{$tecnico->phone}}</td>
-                  <td class="dont-break">{{$tecnico->validity_aso}}</td> 
-                  <td class="dont-break">{{$tecnico->validity_epi}}</td>
-                  <td class="dont-break">{{$tecnico->validity_nr10}}</td>
-                  <td class="dont-break">{{$tecnico->validity_nr11}}</td>
-                  <td class="dont-break">{{$tecnico->validity_nr35}}</td>
-                  <td class="dont-break">{{$tecnico->situation}}</td>
+                  <td class="dont-break"><nobr>{{$tecnico->birth}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->rg}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->cpf}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->ctps}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->cnh}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->phone}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->validity_aso}}</nobr></td> 
+                  <td class="dont-break"><nobr>{{$tecnico->validity_epi}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->validity_nr10}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->validity_nr11}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->validity_nr35}}</nobr></td>
+                  <td class="dont-break"><nobr>{{$tecnico->situation}}</nobr></td>
                   <td class="dont-break"><nobr>{{$tecnico->created_at}}</nobr></td>
                   <td class="dont-break"><nobr>{{$tecnico->updated_at}}</nobr></td>
                 </tr>

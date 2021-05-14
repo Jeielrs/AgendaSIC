@@ -5,5 +5,6 @@
     @include('navbar.managerMenu')
     <div class="container">
         <h1>Editar Técnicos</h1>
+        <p>A id to técnico é <?php echo $id; ?></p>
     </div>
 @endsection

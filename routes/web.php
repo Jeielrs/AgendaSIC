@@ -23,9 +23,14 @@ Route::get('logout', [UsuarioController::class, 'logout'])->name('usuarios.logou
 
 Route::get('painel', [PainelController::class, 'index']);
 
-Route::get('tecnicos', [TecnicoController::class, 'index']);
+Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos');
 Route::get('tecnicos/edit', [TecnicoController::class, 'edit']);
 Route::get('tecnicos/create', [TecnicoController::class, 'create']);
+Route::post('tecnicos', [TecnicoController::class, 'insert'])->name('tecnicos.insert');
+//Route::get('tecnicos/{id}/{valor}', [TecnicoController::class, 'show'])->name('tecnicos.show');
+Route::get('tecnicos/show/{id}', [TecnicoController::class, 'show'])->name('tecnicos.show');
+Route::get('tecnicos/edit', [TecnicoController::class, 'edit'])->name('tecnicos.edit');
+Route::get('tecnicos/delete', [TecnicoController::class, 'delete'])->name('tecnicos.delete');
 
 Route::get('padroes', [PadraoController::class, 'index']);
 Route::get('padroes/edit', [PadraoController::class, 'edit']);

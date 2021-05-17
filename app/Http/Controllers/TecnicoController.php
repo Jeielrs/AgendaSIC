@@ -62,7 +62,7 @@ class TecnicoController extends Controller
     public function show($id)
     {
         @session_start();
-        return view('tecnicos.admin.show', ['id'=> $id]);
+        return view('tecnicos.manager.show', ['id'=> $id]);
     }
 
     public function edit($id)

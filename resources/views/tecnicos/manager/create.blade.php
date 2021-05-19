@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">RG:</label>
-                                <input type="text" name="rg" class="form-control" placeholder="XX.XXX.XXX-X" required>
+                                <input type="text" name="rg" class="form-control" onkeypress="$(this).mask('00.000.000-A');" required>
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">CPF:</label>
-                                <input type="text" name="cpf" class="form-control" placeholder="XXX.XXX.XXX-XX" required>
+                                <input type="text" name="cpf" class="form-control" onkeypress="$(this).mask('000.000.000-00');" required>
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">CTPS:</label>
@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Telefone:</label>
-                                <input type="text" name="telefone" class="form-control" required>
+                                <input type="tel" name="telefone" class="form-control" onkeypress="$(this).mask('(00) 00000-0009')" required>
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">CNH:</label>
@@ -65,11 +65,11 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade EPI:</label>
-                                <input type="text" name="validade_epi" class="form-control" required>
+                                <input type="month" name="validade_epi" class="form-control" required>
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade NR10:</label>
-                                <input type="text" name="validade_nr10" class="form-control" required>
+                                <input type="month" name="validade_nr10" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -77,11 +77,11 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade NR11:</label>
-                                <input type="text" name="validade_nr11" class="form-control" required>
+                                <input type="month" name="validade_nr11" class="form-control" required>
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade NR35:</label>
-                                <input type="text" name="validade_nr35" class="form-control" required>
+                                <input type="month" name="validade_nr35" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade ASO:</label>
-                                <input type="text" name="validade_aso" class="form-control" required>                             
+                                <input type="month" name="validade_aso" class="form-control" required>                             
                             </div>
                         </div>
                     </div>

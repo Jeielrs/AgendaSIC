@@ -8,55 +8,38 @@
   </a>  
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li class="nav-item dropdown @yield('servicos_ativo')">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Serviços
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/servicos">Consultar</a>
-                <a class="dropdown-item" href="/servicos/edit">Editar</a>
-                <a class="dropdown-item" href="/servicos/create">Cadastrar</a>
-              </div>
+          <li class="nav-item @yield('servicos_ativo')">
+            <a class="nav-link" href="/servicos">
+              Serviços
+            </a>
           </li>
-          <li class="nav-item dropdown @yield('tecnicos_ativo')">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Técnicos
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/tecnicos">Consultar</a>
-                <a class="dropdown-item" href="/tecnicos/edit">Editar</a>
-                <a class="dropdown-item" href="/tecnicos/create">Cadastrar</a>
-              </div>
+          <li class="nav-item @yield('tecnicos_ativo')">
+            <a class="nav-link " href="/tecnicos">
+              Técnicos
+            </a>
           </li>
           <li class="nav-item dropdown @yield('padroes_ativo')">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Padrões
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/padroes">Consultar</a>
-                <a class="dropdown-item" href="/padroes/edit">Editar</a>
-                <a class="dropdown-item" href="/padroes/create">Cadastrar</a>
-              </div>
+            <a class="nav-link " href="/padroes">
+              Padrões
+            </a>
           </li>
-          <li class="nav-item dropdown @yield('veiculos_ativo')">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Veículos
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/veiculos">Consultar</a>
-                <a class="dropdown-item" href="/veiculos/edit">Editar</a>
-                <a class="dropdown-item" href="/veiculos/create">Cadastrar</a>
-                <!--div class="dropdown-divider"></div-->
-                <!--a class="dropdown-item" href="#">Cadastrar</a-->
-              </div>
+          <li class="nav-item @yield('veiculos_ativo')">
+            <a class="nav-link " href="/veiculos">
+              Veículos
+            </a>
           </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
+          <li class="nav-item @yield('clientes_ativo')">
+            <a class="nav-link " href="/clientes">
+              Clientes
+            </a>
+          </li>
           <li>
-            <a  href="#" class="nav-link active" data-toggle="modal" data-tt="tooltip" title="Versão" ata-placement="right" data-target="#modalsobre">
+            <a  href="#" class="nav-link @yield('sobre_ativo')" data-toggle="modal" data-tt="tooltip" title="Versão" ata-placement="right" data-target="#modalsobre">
               Sobre
             </a>
           </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">            
           <li class="nav-item dropdown active">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{$_SESSION['nome']}}

@@ -62,26 +62,43 @@ class TecnicoController extends Controller
     public function show($id)
     {
         @session_start();
-        return view('tecnicos.manager.show', ['id'=> $id]);
+        if($_SESSION['nivel'] == 'admin'){
+            return view('tecnicos.admin.show,', ['id' => $id]);
+        }        
+        elseif ($_SESSION['nivel'] == 'manager') {
+            return view('tecnicos.manager.show', ['id' => $id]);
+        }        
+        elseif ($_SESSION['nivel'] == 'user') {
+            return view('tecnicos.user.show', ['id' => $id]);
+        }
     }
 
     public function edit($id)
     {
         @session_start();
         if($_SESSION['nivel'] == 'admin'){
-            return view('tecnicos.admin.edit');
+            return view('tecnicos.admin.edit,', ['id' => $id]);
         }        
         elseif ($_SESSION['nivel'] == 'manager') {
-            return view('tecnicos.manager.edit');
+            return view('tecnicos.manager.edit', ['id' => $id]);
         }        
         elseif ($_SESSION['nivel'] == 'user') {
-            return view('tecnicos.user.edit');
-        } 
+            return view('tecnicos.user.edit', ['id' => $id]);
+        }
     }
 
     public function delete($id)
     {
-        
+        @session_start();
+        if($_SESSION['nivel'] == 'admin'){
+            return view('tecnicos.admin.delete', ['id' => $id]);
+        }        
+        elseif ($_SESSION['nivel'] == 'manager') {
+            return view('tecnicos.manager.delete', ['id' => $id]);
+        }        
+        elseif ($_SESSION['nivel'] == 'user') {
+            return view('tecnicos.user.delete', ['id' => $id]);
+        } 
     }
 
     public function destroy($id)

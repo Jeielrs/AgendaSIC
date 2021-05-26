@@ -45,7 +45,7 @@
                     </div>
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Data da Locação:</label>
-                        <input type="date" name="data_locacao" class="form-control" required>
+                        <input type="date" name="data_locacao" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3">                   
@@ -64,7 +64,6 @@
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Situação:</label>
                         <select name="situacao" class="form-control" required>
-                            <option selected>Escolher</option>
                             <option value="livre">Livre</option>
                             <option value="em_uso">Em uso</option>
                             <option value="inativo">Inativo</option>
@@ -72,13 +71,13 @@
                     </div>
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Prazo da Locação:</label>
-                        <input type="date" name="prazo_locacao" class="form-control" required>
+                        <input type="date" name="prazo_locacao" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Usuário:</label>
-                        <input type="search" name="usuario" list="usuario" class="form-control" required>
+                        <input type="search" name="usuario" list="usuario" class="form-control">
                         <datalist id="usuario">
                             @foreach ($tecnicos as $tecnico)
                                 <option value="{{$tecnico->id}} - {{$tecnico->name}}"></option>
@@ -87,7 +86,7 @@
                     </div>
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Observação:</label>
-                        <textarea class="form-control" name="obs" rows="7" pattern="[a-zA-Z0-9]+" required></textarea>
+                        <textarea class="form-control" name="obs" rows="7" pattern="[a-zA-Z0-9]+"></textarea>
                     </div>
                 </div>
                 <div class="container">

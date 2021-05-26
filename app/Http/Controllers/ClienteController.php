@@ -2,28 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        session_start();
+        $clientes = Cliente::paginate(); //busca com paginação
+        if($_SESSION['nivel'] == 'admin'){
+            return view('clientes.admin.index', ['clientes'=> $clientes]);
+        }        
+        elseif ($_SESSION['nivel'] == 'manager') {
+            return view('clientes.manager.index', ['clientes'=> $clientes]);
+        }        
+        elseif ($_SESSION['nivel'] == 'user') {
+            return view('clientes.user.index', ['clientes'=> $clientes]);
+        }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Abre a Tela de Sincronização.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function synchronize()
     {
-        //
+        session_start();
+        $clientes = Cliente::all(); //busca com paginação
+        if($_SESSION['nivel'] == 'admin'){
+            return view('clientes.admin.synchronize', ['clientes'=> $clientes]);
+        }        
+        elseif ($_SESSION['nivel'] == 'manager') {
+            return view('clientes.manager.synchronize', ['clientes'=> $clientes]);
+        }        
+        elseif ($_SESSION['nivel'] == 'user') {
+            return view('clientes.user.synchronize', ['clientes'=> $clientes]);
+        }
     }
 
     /**

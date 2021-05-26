@@ -11,15 +11,17 @@ class VeiculoController extends Controller
     public function index()
     {
         session_start();
-        
+
+        $veiculos = Veiculo::paginate();
+
         if($_SESSION['nivel'] == 'admin'){
-            return view('veiculos.admin.index');
+            return view('veiculos.admin.index', ['veiculos' => $veiculos]);
         }        
         elseif ($_SESSION['nivel'] == 'manager') {
-            return view('veiculos.manager.index');
+            return view('veiculos.manager.index', ['veiculos' => $veiculos]);
         }        
         elseif ($_SESSION['nivel'] == 'user') {
-            return view('veiculos.user.index');
+            return view('veiculos.user.index', ['veiculos' => $veiculos]);
         }
     }
 
@@ -40,12 +42,14 @@ class VeiculoController extends Controller
         }
     }
 
-    public function insert(Request $request){        
-        $usuario = explode(" -", $request->usuario);
+    public function insert(Request $request){
+
+        #se for nulo recebe null, senão pega apenas o numero antes do ífen #ternária
+        $num_usuario = is_null($request->usuario) ? null : (explode(" -", $request->usuario))[0];
         
         $veiculo = new Veiculo();        
         $veiculo->vehicle_plate = $request->placa;
-        $veiculo->vehicle_user = $usuario[0];
+        $veiculo->vehicle_user = $num_usuario;
         $veiculo->brand = $request->marca;
         $veiculo->model = $request->modelo;
         $veiculo->km = $request->km;

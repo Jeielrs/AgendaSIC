@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\manager\DashboardController as ManagerDashboardController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PadraoController;
 use App\Http\Controllers\PainelController;
 use App\Http\Controllers\ServicoController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\TecnicoController;
 use App\Http\Controllers\user\DashboardController as UserDashboardController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VeiculoController;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Route;
 
 
@@ -48,10 +50,14 @@ Route::get('servicos/show/{id}', [ServicoController::class, 'show'])->name('serv
 Route::get('servicos/edit/{id}', [ServicoController::class, 'edit'])->name('servicos.edit');
 Route::get('servicos/delete/{id}', [ServicoController::class, 'delete'])->name('servicos.delete');
 
-Route::get('veiculos', [VeiculoController::class, 'index']);
+Route::get('veiculos', [VeiculoController::class, 'index'])->name('veiculos');
 Route::get('veiculos/create', [VeiculoController::class, 'create']);
 Route::post('veiculos', [VeiculoController::class, 'insert'])->name('veiculos.insert');
 Route::get('veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
 Route::get('veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
 Route::get('veiculos/delete/{id}', [VeiculoController::class, 'delete'])->name('veiculos.delete');
+
+Route::get('clientes', [ClienteController::class, 'index'])->name('clientes');
+Route::get('clientes/synchronize', [ClienteController::class, 'synchronize']);
+Route::get('clientes/show/{id}', [ClienteController::class, 'show'])->name('clientes.show');
 

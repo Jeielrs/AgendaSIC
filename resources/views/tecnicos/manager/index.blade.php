@@ -3,7 +3,7 @@
 @section('tecnicos_ativo', 'active')
 @section('content')
   @include('navbar.managerMenu')
-  <div class="container">
+  <div class="m-2">
     <div class="row">
       <div class="col-md-6">
         <h3 class="titulo-rota">Técnicos</h3>
@@ -13,7 +13,7 @@
       </div>
     </div>
   </div>
-  <div class="container" id="datatable">
+  <div class="m-2" id="datatable">
     <!-- DataTables Example -->
     <div class="card shadow mb-4">
       <div class="card-body">
@@ -57,6 +57,8 @@
                     <td class="dont-break bg-warning text-white text-center"><nobr>{{$tecnico->situation}}</nobr></td>
                   @elseif ($tecnico->situation == 'Afastado')
                     <td class="dont-break bg-danger text-white text-center"><nobr>{{$tecnico->situation}}</nobr></td>
+                  @else
+                      <td></td>
                   @endif
                   <td class="dont-break"><nobr>{{$tecnico->name}}</nobr></td>
                   <td class="dont-break"><nobr>{{$tecnico->birth}}</nobr></td>

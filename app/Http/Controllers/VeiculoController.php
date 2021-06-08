@@ -44,7 +44,7 @@ class VeiculoController extends Controller
 
     public function insert(Request $request){
 
-        #se for nulo recebe null, senão pega apenas o numero antes do ífen #ternária
+        #se for nulo recebe null, senão pega apenas o numero antes do hífen #ternária
         $num_usuario = is_null($request->usuario) ? null : (explode(" -", $request->usuario))[0];
         
         $veiculo = new Veiculo();        
@@ -58,9 +58,19 @@ class VeiculoController extends Controller
         $veiculo->rent_date = $request->data_locacao;
         $veiculo->rental_term = $request->prazo_locacao;
         $veiculo->obs = $request->obs;
-        //print_r($veiculo); exit;
-        $veiculo->save();
-        return redirect()->route('veiculos');
+        
+        $itens = $veiculo::where('vehicle_plate', '=', $request->placa)->count();
+        if ($itens > 0) {
+            echo "<script language='javascript'> window.alert('Já existe um veículo cadastrado com essa placa!') </script>";
+            session_start();
+            return view('veiculos.manager.create');
+        }else {
+            $veiculo->save();
+            echo "<script language='javascript'> window.alert('Veículo cadastrado com sucesso!') </script>";
+            session_start();
+            return view('veiculos.manager.create');
+        }
+        
     }
 
     public function show($id)

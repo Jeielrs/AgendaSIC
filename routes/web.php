@@ -51,7 +51,7 @@ Route::get('servicos/edit/{id}', [ServicoController::class, 'edit'])->name('serv
 Route::get('servicos/delete/{id}', [ServicoController::class, 'delete'])->name('servicos.delete');
 
 Route::get('veiculos', [VeiculoController::class, 'index'])->name('veiculos');
-Route::get('veiculos/create', [VeiculoController::class, 'create']);
+Route::get('veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
 Route::post('veiculos', [VeiculoController::class, 'insert'])->name('veiculos.insert');
 Route::get('veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
 Route::get('veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
@@ -60,4 +60,5 @@ Route::get('veiculos/delete/{id}', [VeiculoController::class, 'delete'])->name('
 Route::get('clientes', [ClienteController::class, 'index'])->name('clientes');
 Route::get('clientes/synchronize', [ClienteController::class, 'synchronize']);
 Route::get('clientes/show/{id}', [ClienteController::class, 'show'])->name('clientes.show');
+Route::get('clientes/sync', [ClienteController::class, 'sync'])->name('clientes.sync');
 

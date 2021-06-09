@@ -12,7 +12,7 @@ class ClienteController extends Controller
     public function index()
     {
         session_start();
-        $clientes = Cliente::all(); //busca com paginação
+        $clientes = Cliente::paginate(); //busca com paginação
         if($_SESSION['nivel'] == 'admin'){
             return view('clientes.admin.index', ['clientes'=> $clientes]);
         }        
@@ -32,7 +32,7 @@ class ClienteController extends Controller
     public function synchronize()
     {
         session_start();
-        $clientes = Cliente::ge(); //busca com paginação
+        $clientes = Cliente::paginate(); //busca com paginação
         if($_SESSION['nivel'] == 'admin'){
             return view('clientes.admin.synchronize', ['clientes'=> $clientes]);
         }        

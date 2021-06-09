@@ -32,7 +32,7 @@ class ClienteController extends Controller
     public function synchronize()
     {
         session_start();
-        $clientes = Cliente::all(); //busca com paginação
+        $clientes = Cliente::paginate(); //busca com paginação
         if($_SESSION['nivel'] == 'admin'){
             return view('clientes.admin.synchronize', ['clientes'=> $clientes]);
         }        
@@ -50,7 +50,7 @@ class ClienteController extends Controller
     public function sync(Request $request)
     {
         $tempo_inicio = microtime( true );
-        $log = "";
+        $logCadastro = "<b><h5>Iniciando cadastro, buscando por clientes já cadastrados...</h5></b>";
 
         //buscando clientes no omie
 		$i = 1;
@@ -76,16 +76,28 @@ class ClienteController extends Controller
         //$log .=  "Registros nessa página : " . print_r($retornoOmie->registros, true) . "<br>";
         //$log .=  "Total de Registros : " . print_r($retornoOmie->total_de_registros, true) . "<br>";
             
-        $log .=  "<pre>" . print_r($arrayClientes, true);
+        //$log .=  "<pre>" . print_r($arrayClientes, true);
 
-        //foreach ($arrayClientes as $key => $cliente) {
-        //    # pra cada cliente pesquisar o codigo omiee cadastrar
-        //}
-            
+        foreach ($arrayClientes as $key => $clienteOmie) {
+            $clienteBase = Cliente::where('codigo_cliente_omie', "=", $clienteOmie['codigo_cliente_omie'])->first();
+            if (isset($clienteBase->id)) {
+                $logCadastro .= "Cliente ". $clienteOmie['razao_social'] ." já cadastrado na ID ". $clienteBase->id ."<br>";
+            } else {
+                $insertedId = $this->insert($clienteOmie);
+                $logCadastro .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " inserido com a ID ".$insertedId."<br>";
+            }
+           //$insert = $this->insert($cliente);
+           //echo "Cliente ".$cliente['codigo_cliente_omie']." - ".$cliente['razao_social']. "inserido com a ID ".$insert->last_insert_id."<hr>";
+        }
+        $logCadastro .= "<b><h5>Cadastro finalizado</h5></b><hr>";
+        $logUpdate =  "<b><h5>Buscando por Clientes desatualizados...</h5></b>";
+
+        $logUpdate .= "<b><h5>Atualizações finalizadas.</h5></b><hr>";
         $tempo_fim = microtime( true );
         $tempo_execucao = ($tempo_fim - $tempo_inicio);
-        $logCompleto = '<b>Tempo de Execução:</b> '.$tempo_execucao.' Segs <br><br>';
-        $logCompleto .= $log;
+        $logCompleto = '<b><h5>Tempo de Execução:</h5></b> '.$tempo_execucao.' Segs <hr>';
+        $logCompleto .= $logCadastro;
+        $logCompleto .= $logUpdate;
         echo $logCompleto; //para aparecer na tela
     }
 
@@ -104,14 +116,16 @@ class ClienteController extends Controller
             $telefone_num = isset($cliente->telefone1_numero)?$cliente->telefone1_numero:'';
             $telefone = (is_null($telefone_ddd) and is_null($telefone_num))?null:$telefone_ddd." ".$telefone_num;
             $endereco = ($cliente->endereco != "")?$cliente->endereco:null;
-            $endereco = ($cliente->endereco_numero != "")?$endereco.", ".$cliente->endereco_numero:$endereco;
-            $endereco = ($cliente->bairro != "")?$endereco." - ".$cliente->bairro:$endereco;
+            $endereco = ($cliente->endereco_numero != "")?$endereco." | ".$cliente->endereco_numero:$endereco;
+            $endereco = ($cliente->bairro != "")?$endereco." | ".$cliente->bairro:$endereco;
             $cidade = explode(" (", $cliente->cidade);
+            $cep = ($cliente->cep != "")?$cliente->cep:null;
             $data_alt = $cliente->info->dAlt." ".$cliente->info->hAlt;
             $data_inc = $cliente->info->dInc." ".$cliente->info->hInc;
             $tag_cliente = (isset($cliente->tags[0]->tag) == "Cliente")?"S":"N";
             $observacao = isset($cliente->observacao)?$cliente->observacao:null;
             $tag_segmento = (isset($cliente->tags[1]->tag))?$cliente->tags[1]->tag:null;
+            $status = ($cliente->inativo == "N")?"ativo":"inativo";
             #TRATAMENTO DOS DADOS RECEBIDOS DO OMIE
 
             if ($tag_cliente == "S") {
@@ -122,7 +136,8 @@ class ClienteController extends Controller
                     "endereco" => $endereco,
                     "cidade" => $cidade[0],
                     "estado" => $cliente->estado,
-                    "inativo" => $cliente->inativo,
+                    "cep" => $cliente->cep,
+                    "status" => $status,
                     "data_Alt" => date_create_from_format("d/m/Y H:i:s", $data_alt)->format("Y-m-d H:i:s"),
                     "data_Inc" => date_create_from_format("d/m/Y H:i:s", $data_inc)->format("Y-m-d H:i:s"),
                     "nome_fantasia" => $cliente->nome_fantasia,
@@ -168,6 +183,30 @@ class ClienteController extends Controller
         $result = $clientes->ListarClientes($request);
 
         return $result;
+    }
+
+    /*
+     * Insere Clientes na tabela
+     */
+    public function insert($array){
+        $cliente = new Cliente();
+        $cliente->codigo_cliente_omie = $array['codigo_cliente_omie'];
+        $cliente->status = $array['status'];
+        $cliente->segmento = $array['segmento'];
+        $cliente->razao_social = $array['razao_social'];
+        $cliente->cnpj_cpf = $array['cnpj_cpf'];
+        $cliente->nome_fantasia = $array['nome_fantasia'];
+        $cliente->telefone = $array['telefone'];
+        $cliente->endereco = $array['endereco'];
+        $cliente->estado = $array['estado'];
+        $cliente->cidade = $array['cidade'];
+        $cliente->cep = $array['cep'];
+        $cliente->email = $array['email'];
+        $cliente->observacao = $array['observacao'];
+        $cliente->pessoa_fisica = $array['pessoa_fisica'];
+        $cliente->save();
+        $insertedId = $cliente->id;
+        return $insertedId;
     }
 
         /**

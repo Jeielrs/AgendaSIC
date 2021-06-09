@@ -21,8 +21,9 @@
           <table class="table table-sm table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <tr>
-                <th class="dont-break"><i class="fas fa-eye text-primary"></i></th>
+                <th class="dont-break"><i class="fas fa-eye text-secondary"></i></th>
                 <th class="dont-break">ID</th>
+                <th class="dont-break">Status</th>
                 <th class="dont-break">Razão Social</th>
                 <th class="dont-break">CNPJ / CPF</th>
                 <th class="dont-break">Nome Fantasia</th>
@@ -42,7 +43,15 @@
             <tbody>
               @foreach($clientes as $cliente)            
                 <tr>
+                  <td>
+                    <a href="{{route('clientes.show', $cliente->id)}}"><i class="fas fa-eye text-primary"></i></a>
+                  </td>
                     <td class="dont-break"><nobr>{{$cliente->id}}</nobr></td>
+                    @if ($cliente->status == "ativo")                      
+                      <td class="dont-break bg-success text-white text-center"><nobr>Ativo</nobr></td>
+                    @else
+                      <td class="dont-break bg-danger text-white text-center"><nobr>Inativo</nobr></td>
+                    @endif
                     <td class="dont-break"><nobr>{{$cliente->razao_social}}</nobr></td>
                     <td class="dont-break"><nobr>{{$cliente->cnpj_cpf}}</nobr></td>
                     <td class="dont-break"><nobr>{{$cliente->nome_fantasia}}</nobr></td>

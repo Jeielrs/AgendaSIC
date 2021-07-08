@@ -3,7 +3,7 @@
 @section('padroes_ativo', 'active')
 @section('content')
     @include('navbar.managerMenu')
-    <div class="container">
+    <div class="m-3">
         <div class="row">
             <div class="col-md-6">
               <h3 class="titulo-rota">Padrões > Cadastro</h3>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="container mt-4" id="formulario">
+    <div class="m-3" id="formulario">
         <form action="{{route('padroes.insert')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row form-group">

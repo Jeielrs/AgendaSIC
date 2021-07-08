@@ -3,7 +3,7 @@
 @section('veiculos_ativo', 'active')
 @section('content')
     @include('navbar.managerMenu')
-    <div class="container">
+    <div class="m-3">
         <div class="row">
             <div class="col-md-6">
               <h3 class="titulo-rota">Veículos > Cadastro</h3>
@@ -13,14 +13,14 @@
             </div>
         </div>
     </div>
-    <div class="container mt-4" id="formulario">
+    <div class="m-3" id="formulario">
         <form action="{{route('veiculos.insert')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row form-group">
                 <div class="col-lg-3">
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Placa:</label>
-                        <input type="text" name="placa" class="form-control" required>
+                        <input type="text"  name="placa" class="form-control" onkeyup="this.value = this.value.toUpperCase();" required>
                     </div>                    
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Marca:</label>
@@ -80,7 +80,7 @@
                         <input type="search" name="usuario" list="usuario" class="form-control">
                         <datalist id="usuario">
                             @foreach ($tecnicos as $tecnico)
-                                <option value="{{$tecnico->id}} - {{$tecnico->name}}"></option>
+                                <option value="{{$tecnico->name}}"></option>
                             @endforeach
                         </datalist>
                     </div>

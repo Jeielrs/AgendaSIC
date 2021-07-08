@@ -25,23 +25,21 @@ Route::get('logout', [UsuarioController::class, 'logout'])->name('usuarios.logou
 
 Route::get('painel', [PainelController::class, 'index']);
 
-Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos');
-Route::get('tecnicos/edit', [TecnicoController::class, 'edit']);
+Route::resource('tecnicos', 'App\Http\Controllers\TecnicoController');
+Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos.index');
+Route::get('tecnicos/{id}/show', [TecnicoController::class, 'show']);
 Route::get('tecnicos/create', [TecnicoController::class, 'create']);
-Route::post('tecnicos', [TecnicoController::class, 'insert'])->name('tecnicos.insert');
-//Route::get('tecnicos/{id}/{valor}', [TecnicoController::class, 'show'])->name('tecnicos.show');
-Route::get('tecnicos/show/{id}', [TecnicoController::class, 'show'])->name('tecnicos.show');
-Route::get('tecnicos/edit/{id}', [TecnicoController::class, 'edit'])->name('tecnicos.edit');
-Route::get('tecnicos/delete/{id}', [TecnicoController::class, 'delete'])->name('tecnicos.delete');
-//Route::get('tecnicos/edit', [TecnicoController::class, 'edit'])->name('tecnicos.edit');
-//Route::get('tecnicos/delete', [TecnicoController::class, 'delete'])->name('tecnicos.delete');
+Route::post('tecnicos/create', [TecnicoController::class, 'insert'])->name('tecnicos.insert');
+Route::post('tecnicos/update', [TecnicoController::class, 'update'])->name('tecnicos.update');
+Route::get('tecnicos/destroy/{id}', [TecnicoController::class, 'destroy']);
 
-Route::get('padroes', [PadraoController::class, 'index'])->name('padroes');
+Route::resource('padroes', 'App\Http\Controllers\PadraoController');
+Route::get('padroes', [PadraoController::class, 'index'])->name('padroes.index');
+Route::get('padroes/{id}/show', [PadraoController::class, 'show']);
 Route::get('padroes/create', [PadraoController::class, 'create']);
-Route::post('padroes', [PadraoController::class, 'insert'])->name('padroes.insert');
-Route::get('padroes/show/{id}', [PadraoController::class, 'show'])->name('padroes.show');
-Route::get('padroes/edit/{id}', [PadraoController::class, 'edit'])->name('padroes.edit');
-Route::get('padroes/delete/{id}', [PadraoController::class, 'delete'])->name('padroes.delete');
+Route::post('padroes/create', [PadraoController::class, 'insert'])->name('padroes.insert');
+Route::post('padroes/update', [PadraoController::class, 'update'])->name('padroes.update');
+Route::get('padroes/destroy/{id}', [PadraoController::class, 'destroy']);
 
 Route::get('servicos', [ServicoController::class, 'index']);
 Route::get('servicos/create', [ServicoController::class, 'create']);
@@ -50,15 +48,17 @@ Route::get('servicos/show/{id}', [ServicoController::class, 'show'])->name('serv
 Route::get('servicos/edit/{id}', [ServicoController::class, 'edit'])->name('servicos.edit');
 Route::get('servicos/delete/{id}', [ServicoController::class, 'delete'])->name('servicos.delete');
 
-Route::get('veiculos', [VeiculoController::class, 'index'])->name('veiculos');
-Route::get('veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
-Route::post('veiculos', [VeiculoController::class, 'insert'])->name('veiculos.insert');
-Route::get('veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
-Route::get('veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
-Route::get('veiculos/delete/{id}', [VeiculoController::class, 'delete'])->name('veiculos.delete');
+Route::resource('veiculos', 'App\Http\Controllers\VeiculoController');
+Route::get('veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
+Route::get('veiculos/{id}/show', [VeiculoController::class, 'show']);
+Route::get('veiculos/create', [VeiculoController::class, 'create']);
+Route::post('veiculos/create', [VeiculoController::class, 'insert'])->name('veiculos.insert');
+Route::post('veiculos/update', [VeiculoController::class, 'update'])->name('veiculos.update');
+Route::get('veiculos/destroy/{id}', [VeiculoController::class, 'destroy']);
 
-Route::get('clientes', [ClienteController::class, 'index'])->name('clientes');
+Route::resource('clientes', 'App\Http\Controllers\ClienteController');
+Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.index');
+Route::get('clientes/{id}/show', [ClienteController::class, 'show']);
 Route::get('clientes/synchronize', [ClienteController::class, 'synchronize']);
-Route::get('clientes/show/{id}', [ClienteController::class, 'show'])->name('clientes.show');
 Route::get('clientes/sync', [ClienteController::class, 'sync'])->name('clientes.sync');
 

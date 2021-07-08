@@ -33,7 +33,7 @@
                 Clientes
               </a>
             </li>
-            <li>
+            <li class="nav-item">
               <a  href="#" class="nav-link @yield('sobre_ativo')" data-toggle="modal" data-tt="tooltip" title="Versão" ata-placement="right" data-target="#modalsobre">
                 Sobre
               </a>

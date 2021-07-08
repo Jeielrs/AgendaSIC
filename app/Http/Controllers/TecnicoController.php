@@ -4,24 +4,63 @@ namespace App\Http\Controllers;
 
 use App\Models\Tecnico;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use DataTables;
+use Validator;
 
 class TecnicoController extends Controller
 {
-    
-    public function index()
+    /**
+    * Exibe uma listagem dos recursos
+    *
+    * @return \Illuminate\Http\Response
+    */    
+    public function index(Request $request)
     {
-        @session_start();
-        #$tecnicos = Tecnico::all(); //busca todos os registros da tabela
-        $tecnicos = Tecnico::orderby('name', 'asc')->paginate(); //busca com paginação
+        if ($request->ajax()) {            
+            $data = Tecnico::latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($data){
+                    $button = '<a href="#" class="show" id="'.$data->id.'"><i class="fas fa-eye text-info"></i></a>';
+                    $button .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="edit" id="'.$data->id.'"><i class="fas fa-edit text-warning"></i></a>';
+                    $button .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="delete" id="'.$data->id.'"><i class="fas fa-trash-alt text-danger"></i></a>';
+                    return $button;
+                })
+                ->setRowAttr([
+                    'style' => function() {
+                        return "font-size:14px; white-space : nowrap;";
+                    },
+                    #'class' => function() {
+                    #    return "text-center";
+                    #},
+                ])
+                ->setRowClass(function ($row) {
+                    if ( $row->situation == 'Ativo') {
+                        $row->situation = 'alert-success';
+                    } elseif ($row->situation == 'Férias') {
+                        $row->situation = 'alert-warning';
+                    }else {
+                        $row->situation = 'alert-secondary';
+                    }
+                    return $row->situation;
+                })
+                ->editColumn('birth', function ($row) {
+                    return date("d/m/Y", strtotime($row->birth));
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        session_start();
         if($_SESSION['nivel'] == 'admin'){
-            return view('tecnicos.admin.index', ['tecnicos' => $tecnicos]);
+            return view('tecnicos.admin.index');
         }        
         elseif ($_SESSION['nivel'] == 'manager') {
-            return view('tecnicos.manager.index', ['tecnicos' => $tecnicos]);
+            return view('tecnicos.manager.index');
         }        
         elseif ($_SESSION['nivel'] == 'user') {
-            return view('tecnicos.user.index', ['tecnicos' => $tecnicos]);
-        } 
+            return view('tecnicos.user.index');
+        }
     }
 
     public function create()
@@ -55,54 +94,120 @@ class TecnicoController extends Controller
         $tecnico->validity_nr35 = $request->validade_nr35;
         $tecnico->situation = $request->situacao;
         $tecnico->obs = $request->obs;
-        $tecnico->save();
-        return redirect()->route('tecnicos');
+
+        $nomes = $tecnico::where('name', '=', $request->nome)->count();
+        $cpfs = $tecnico::where('cpf', '=', $request->cpf)->count();
+        $rgs = $tecnico::where('rg', '=', $request->rg)->count();
+        if ($nomes > 0) {
+            echo "<script language='javascript'> window.alert('Já existe um técnico cadastrado com esse nome!') </script>";
+            session_start();
+            return view('tecnicos.manager.create');
+        }elseif ($cpfs > 0) {
+            echo "<script language='javascript'> window.alert('Já existe um técnico cadastrado com esse CPF!') </script>";
+            session_start();
+            return view('tecnicos.manager.create');
+        }elseif ($rgs > 0) {
+            echo "<script language='javascript'> window.alert('Já existe um técnico cadastrado com esse RG!') </script>";
+            session_start();
+            return view('tecnicos.manager.create');
+        }else {
+            $tecnico->save();
+            echo "<script language='javascript'> window.alert('Técnico cadastrado com sucesso!') </script>";
+            session_start();
+            return redirect()->route('tecnicos.index');
+        }
     }
 
+    /**
+    * Display the specified resource.
+    *
+    * @param int $id
+    * @return \Illuminate\Http\Response
+    */  
     public function show($id)
     {
-        @session_start();
-        if($_SESSION['nivel'] == 'admin'){
-            return view('tecnicos.admin.show,', ['id' => $id]);
-        }        
-        elseif ($_SESSION['nivel'] == 'manager') {
-            return view('tecnicos.manager.show', ['id' => $id]);
-        }        
-        elseif ($_SESSION['nivel'] == 'user') {
-            return view('tecnicos.user.show', ['id' => $id]);
+        if(request()->ajax())
+        {
+            $data = Tecnico::findOrFail($id);
+            return response()->json(['result' => $data]);
         }
     }
 
+    /**
+    * Mostra o formulário para editar o recurso especificado.
+    *
+    * @param int $id
+    * @return \Illuminate\Http\Response
+    */    
     public function edit($id)
     {
-        @session_start();
-        if($_SESSION['nivel'] == 'admin'){
-            return view('tecnicos.admin.edit,', ['id' => $id]);
-        }        
-        elseif ($_SESSION['nivel'] == 'manager') {
-            return view('tecnicos.manager.edit', ['id' => $id]);
-        }        
-        elseif ($_SESSION['nivel'] == 'user') {
-            return view('tecnicos.user.edit', ['id' => $id]);
+        if(request()->ajax())
+        {
+            $data = Tecnico::findOrFail($id);
+            return response()->json(['result' => $data]);
         }
     }
 
-    public function delete($id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tecnico  $tecnico
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Tecnico $tecnico)
     {
-        @session_start();
-        if($_SESSION['nivel'] == 'admin'){
-            return view('tecnicos.admin.delete', ['id' => $id]);
-        }        
-        elseif ($_SESSION['nivel'] == 'manager') {
-            return view('tecnicos.manager.delete', ['id' => $id]);
-        }        
-        elseif ($_SESSION['nivel'] == 'user') {
-            return view('tecnicos.user.delete', ['id' => $id]);
-        } 
+        $rules = array(
+            'name'      =>  'required',
+            'cpf'       =>  'required',
+            'rg'        =>  'required',
+            'birth'     =>  'required',
+            'cnh'       =>  'required',
+            'ctps'      =>  'required',
+            'phone'     =>  'required',
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if($error->fails())
+        {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        $form_data = array(
+            'name'          =>  $request->name,
+            'birth'         =>  $request->birth,
+            'rg'            =>  $request->rg,
+            'cpf'           =>  $request->cpf,
+            'cnh'           =>  $request->cnh,
+            'ctps'          =>  $request->ctps,
+            'phone'         =>  $request->phone,
+            'validity_aso'  =>  $request->validity_aso == null?'':$request->validity_aso,
+            'validity_epi'  =>  $request->validity_epi == null?'':$request->validity_epi,
+            'validity_nr10' =>  $request->validity_nr10 == null?'':$request->validity_nr10,
+            'validity_nr11' =>  $request->validity_nr11 == null?'':$request->validity_nr11,
+            'validity_nr35' =>  $request->validity_nr35 == null?'':$request->validity_nr35,
+            'situation'     =>  $request->situation == null?'':$request->situation,
+            'obs'           =>  $request->obs == null?'':$request->obs
+        );
+
+        Tecnico::whereId($request->hidden_id)->update($form_data);
+
+        //$debug = $request->all();
+        //return response()->json(['success' => $debug]);
+
+        return response()->json(['success' => 'Registro atualizado com sucesso!']);
     }
 
+    /**
+    * Remove o registro especificado.
+    *
+    * @param int $id
+    * @return \Illuminate\Http\Response
+    */    
     public function destroy($id)
     {
-        //
+        $data = Tecnico::findOrFail($id);
+        $data->delete();
     }
 }

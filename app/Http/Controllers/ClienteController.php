@@ -3,26 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use clientes_list_request;
-use ClientesCadastroJsonClient;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use DataTables;
 
 class ClienteController extends Controller
 {
-    public function index()
-    {
+    /**
+     * Exibe uma listagem dos clientes
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {       
+        if ($request->ajax()) {            
+            $data = Cliente::latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($data){         
+                    $button = '<a href="#" class="show" id="'.$data->id.'"><i class="fas fa-eye text-info"></i></a>';        
+                    return $button;
+                })
+                ->setRowAttr([
+                    'style' => function() {
+                        return "font-size:14px; white-space : nowrap;";
+                    },
+                    #'class' => function() {
+                    #    return "text-center";
+                    #},
+                ])
+                ->setRowClass(function ($row) {
+                    return $row->status == 'inativo' ? 'alert-warning' : 'alert';
+                })
+                ->editColumn('email', function($row) {
+                    $email = (strpos($row->email,',') === false)?$row->email:explode(',', $row->email)[0];
+                    return $email;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
         session_start();
-        $clientes = Cliente::paginate(); //busca com paginação
         if($_SESSION['nivel'] == 'admin'){
-            return view('clientes.admin.index', ['clientes'=> $clientes]);
+            return view('clientes.admin.index');
         }        
         elseif ($_SESSION['nivel'] == 'manager') {
-            return view('clientes.manager.index', ['clientes'=> $clientes]);
+            return view('clientes.manager.index');
         }        
         elseif ($_SESSION['nivel'] == 'user') {
-            return view('clientes.user.index', ['clientes'=> $clientes]);
-        }
-    }
+            return view('clientes.user.index');
+        }    
+    }    
 
     /**
      * Abre a Tela de Sincronização.
@@ -32,7 +62,7 @@ class ClienteController extends Controller
     public function synchronize()
     {
         session_start();
-        $clientes = Cliente::paginate(); //busca com paginação
+        $clientes = Cliente::simplePaginate(); //busca com paginação
         if($_SESSION['nivel'] == 'admin'){
             return view('clientes.admin.synchronize', ['clientes'=> $clientes]);
         }        
@@ -126,6 +156,8 @@ class ClienteController extends Controller
             $observacao = isset($cliente->observacao)?$cliente->observacao:null;
             $tag_segmento = (isset($cliente->tags[1]->tag))?$cliente->tags[1]->tag:null;
             $status = ($cliente->inativo == "N")?"ativo":"inativo";
+            $razao_social = (strpos($cliente->razao_social, '&') === false)?$cliente->razao_social:str_replace('&amp;', ' & ', $cliente->razao_social);
+            $nome_fantasia = (strpos($cliente->nome_fantasia, '&') === false)?$cliente->nome_fantasia:str_replace('&amp;', ' & ', $cliente->nome_fantasia);
             #TRATAMENTO DOS DADOS RECEBIDOS DO OMIE
 
             if ($tag_cliente == "S") {
@@ -140,10 +172,10 @@ class ClienteController extends Controller
                     "status" => $status,
                     "data_Alt" => date_create_from_format("d/m/Y H:i:s", $data_alt)->format("Y-m-d H:i:s"),
                     "data_Inc" => date_create_from_format("d/m/Y H:i:s", $data_inc)->format("Y-m-d H:i:s"),
-                    "nome_fantasia" => $cliente->nome_fantasia,
+                    "nome_fantasia" => $nome_fantasia,
                     "observacao" => $observacao,
                     "pessoa_fisica" => $cliente->pessoa_fisica,
-                    "razao_social" => $cliente->razao_social,
+                    "razao_social" => $razao_social,
                     "segmento" => $tag_segmento,
                     "telefone" => $telefone,
                 );
@@ -215,9 +247,19 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    /**
+    * Display the specified resource.
+    *
+    * @param int $id
+    * @return \Illuminate\Http\Response
+    */
     public function show($id)
     {
-        //
+        if(request()->ajax())
+        {
+            $data = Cliente::findOrFail($id);
+            return response()->json(['result' => $data]);
+        }
     }
 
     /**

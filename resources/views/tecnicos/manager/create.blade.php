@@ -3,7 +3,7 @@
 @section('tecnicos_ativo', 'active')
 @section('content')    
     @include('navbar.managerMenu')
-    <div class="container">
+    <div class="m-3">
         <div class="row">
             <div class="col-md-6">
               <h3 class="titulo-rota">Técnicos > Cadastro</h3>
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="container mt-4" id="formulario">
+    <div class="m-3" id="formulario">
         <form action="{{route('tecnicos.insert')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row form-group">
@@ -65,11 +65,11 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade EPI:</label>
-                                <input type="month" name="validade_epi" class="form-control" required>
+                                <input type="month" name="validade_epi" class="form-control">
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade NR10:</label>
-                                <input type="month" name="validade_nr10" class="form-control" required>
+                                <input type="month" name="validade_nr10" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -77,11 +77,11 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade NR11:</label>
-                                <input type="month" name="validade_nr11" class="form-control" required>
+                                <input type="month" name="validade_nr11" class="form-control">
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade NR35:</label>
-                                <input type="month" name="validade_nr35" class="form-control" required>
+                                <input type="month" name="validade_nr35" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Validade ASO:</label>
-                                <input type="month" name="validade_aso" class="form-control" required>                             
+                                <input type="month" name="validade_aso" class="form-control">                             
                             </div>
                         </div>
                     </div>

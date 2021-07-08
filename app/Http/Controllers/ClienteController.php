@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use clientes_list_request;
+use ClientesCadastroJsonClient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use DataTables;
@@ -100,18 +102,29 @@ class ClienteController extends Controller
 				$i++;
 			}
 		}
-		//
+		
         //$log = "Página : " . print_r($retornoOmie->pagina, true) . "<br>";
         //$log .=  "Total de páginas : " . print_r($retornoOmie->total_de_paginas, true) . "<br>";
         //$log .=  "Registros nessa página : " . print_r($retornoOmie->registros, true) . "<br>";
         //$log .=  "Total de Registros : " . print_r($retornoOmie->total_de_registros, true) . "<br>";
-            
-        //$log .=  "<pre>" . print_r($arrayClientes, true);
+          
+        echo  "<pre>" . print_r($arrayClientes, true);
+
+        $logUpdate =  "<b><h5>Buscando por Clientes desatualizados...</h5></b>";
 
         foreach ($arrayClientes as $key => $clienteOmie) {
             $clienteBase = Cliente::where('codigo_cliente_omie', "=", $clienteOmie['codigo_cliente_omie'])->first();
             if (isset($clienteBase->id)) {
-                $logCadastro .= "Cliente ". $clienteOmie['razao_social'] ." já cadastrado na ID ". $clienteBase->id ."<br>";
+                $logCadastro .= "Cliente ". $clienteOmie['razao_social'] ." já cadastrado na ID ". $clienteBase->id ."... Procurando por atualizações:<br>";
+                $lastUpdateOmie = $clienteOmie['data_Alt'];
+                $lastUpdateBase = Cliente::where('id', "=", $clienteBase->id)->first();
+                $logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";
+                if ($lastUpdateOmie > $lastUpdateBase) {
+                    $updatedId = $this->update($clienteOmie);
+                    $logUpdate .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " atualizado com sucesso!"."<br>";
+                } else {
+                    $logUpdate .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " já estava atualizado <br>";
+                }
             } else {
                 $insertedId = $this->insert($clienteOmie);
                 $logCadastro .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " inserido com a ID ".$insertedId."<br>";
@@ -120,7 +133,12 @@ class ClienteController extends Controller
            //echo "Cliente ".$cliente['codigo_cliente_omie']." - ".$cliente['razao_social']. "inserido com a ID ".$insert->last_insert_id."<hr>";
         }
         $logCadastro .= "<b><h5>Cadastro finalizado</h5></b><hr>";
-        $logUpdate =  "<b><h5>Buscando por Clientes desatualizados...</h5></b>";
+        
+
+        //$clientesBase = Cliente::
+        //foreach ($arrayClientes as $key => $clienteOmie) {
+        //    # code...
+        //}
 
         $logUpdate .= "<b><h5>Atualizações finalizadas.</h5></b><hr>";
         $tempo_fim = microtime( true );
@@ -221,7 +239,7 @@ class ClienteController extends Controller
      * Insere Clientes na tabela
      */
     public function insert($array){
-        $cliente = new Cliente();
+        $cliente = new Cliente;
         $cliente->codigo_cliente_omie = $array['codigo_cliente_omie'];
         $cliente->status = $array['status'];
         $cliente->segmento = $array['segmento'];
@@ -268,9 +286,9 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function teste()
     {
-        //
+        echo "teste";
     }
 
     /**
@@ -280,9 +298,26 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($array)
     {
-        //
+        $cliente = Cliente::find($array['id']);
+        $cliente->codigo_cliente_omie = $array['codigo_cliente_omie'];
+        $cliente->status = $array['status'];
+        $cliente->segmento = $array['segmento'];
+        $cliente->razao_social = $array['razao_social'];
+        $cliente->cnpj_cpf = $array['cnpj_cpf'];
+        $cliente->nome_fantasia = $array['nome_fantasia'];
+        $cliente->telefone = $array['telefone'];
+        $cliente->endereco = $array['endereco'];
+        $cliente->estado = $array['estado'];
+        $cliente->cidade = $array['cidade'];
+        $cliente->cep = $array['cep'];
+        $cliente->email = $array['email'];
+        $cliente->observacao = $array['observacao'];
+        $cliente->pessoa_fisica = $array['pessoa_fisica'];
+        $cliente->save();
+        $updatedId = $cliente->id;
+        return $updatedId;
     }
 
     /**

@@ -183,6 +183,11 @@ class VeiculoController extends Controller
         $data->delete();
     }
 
+    public function teste()
+    {
+        echo "teste";
+    }
+
     public function insert(Request $request){
         $tecnicos = Tecnico::all();
         #se for nulo recebe null, senão pega apenas o numero antes do hífen #ternária

@@ -25,7 +25,7 @@ Route::get('logout', [UsuarioController::class, 'logout'])->name('usuarios.logou
 
 Route::get('painel', [PainelController::class, 'index']);
 
-Route::resource('tecnicos', 'App\Http\Controllers\TecnicoController');
+Route::resource('tecnicos', TecnicoController::class);
 Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos.index');
 Route::get('tecnicos/{id}/show', [TecnicoController::class, 'show']);
 Route::get('tecnicos/create', [TecnicoController::class, 'create']);
@@ -33,7 +33,7 @@ Route::post('tecnicos/create', [TecnicoController::class, 'insert'])->name('tecn
 Route::post('tecnicos/update', [TecnicoController::class, 'update'])->name('tecnicos.update');
 Route::get('tecnicos/destroy/{id}', [TecnicoController::class, 'destroy']);
 
-Route::resource('padroes', 'App\Http\Controllers\PadraoController');
+Route::resource('padroes', PadraoController::class);
 Route::get('padroes', [PadraoController::class, 'index'])->name('padroes.index');
 Route::get('padroes/{id}/show', [PadraoController::class, 'show']);
 Route::get('padroes/create', [PadraoController::class, 'create']);
@@ -48,7 +48,7 @@ Route::get('servicos/show/{id}', [ServicoController::class, 'show'])->name('serv
 Route::get('servicos/edit/{id}', [ServicoController::class, 'edit'])->name('servicos.edit');
 Route::get('servicos/delete/{id}', [ServicoController::class, 'delete'])->name('servicos.delete');
 
-Route::resource('veiculos', 'App\Http\Controllers\VeiculoController');
+Route::resource('veiculos', VeiculoController::class);
 Route::get('veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
 Route::get('veiculos/{id}/show', [VeiculoController::class, 'show']);
 Route::get('veiculos/create', [VeiculoController::class, 'create']);
@@ -56,9 +56,9 @@ Route::post('veiculos/create', [VeiculoController::class, 'insert'])->name('veic
 Route::post('veiculos/update', [VeiculoController::class, 'update'])->name('veiculos.update');
 Route::get('veiculos/destroy/{id}', [VeiculoController::class, 'destroy']);
 
-Route::resource('clientes', 'App\Http\Controllers\ClienteController');
 Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.index');
 Route::get('clientes/{id}/show', [ClienteController::class, 'show']);
 Route::get('clientes/synchronize', [ClienteController::class, 'synchronize']);
 Route::get('clientes/sync', [ClienteController::class, 'sync'])->name('clientes.sync');
+Route::resource('clientes', ClienteController::class);
 

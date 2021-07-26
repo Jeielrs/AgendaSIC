@@ -118,11 +118,11 @@ class ClienteController extends Controller
                 $logCadastro .= "Cliente ". $clienteOmie['razao_social'] ." já cadastrado na ID ". $clienteBase->id ."... Procurando por atualizações:<br>";
                 $lastUpdateOmie = $clienteOmie['data_Alt'];
                 $lastUpdateBase = Cliente::where('id', "=", $clienteBase->id)->first();
-                $logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";
-                if ($lastUpdateOmie > $lastUpdateBase) {
-                    $updatedId = $this->update($clienteOmie);
+                $logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";  
+                if (strtotime($lastUpdateOmie) > strtotime($lastUpdateBase)) {
+                    $updatedId = $this->update($clienteOmie); 
                     $logUpdate .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " atualizado com sucesso!"."<br>";
-                } else {
+                } elseif (strtotime($lastUpdateOmie) <= strtotime($lastUpdateBase)) {
                     $logUpdate .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " já estava atualizado <br>";
                 }
             } else {
@@ -300,7 +300,11 @@ class ClienteController extends Controller
      */
     public function update($array)
     {
-        $cliente = Cliente::find($array['id']);
+        //echo "salve<br>";
+        //print_r($array);
+        $cliente = Cliente::where('codigo_cliente_omie', "=", $array['codigo_cliente_omie'])->first();
+        //echo "<br>salvado<br>";
+        //print_r($cliente);exit();
         $cliente->codigo_cliente_omie = $array['codigo_cliente_omie'];
         $cliente->status = $array['status'];
         $cliente->segmento = $array['segmento'];

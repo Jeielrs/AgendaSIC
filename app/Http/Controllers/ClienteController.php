@@ -8,6 +8,7 @@ use ClientesCadastroJsonClient;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use DataTables;
+use DateTime;
 
 class ClienteController extends Controller
 {
@@ -82,7 +83,8 @@ class ClienteController extends Controller
     public function sync(Request $request)
     {
         $tempo_inicio = microtime( true );
-        $logCadastro = "<b><h5>Iniciando cadastro, buscando por clientes já cadastrados...</h5></b>";
+
+        $logCadastro = "<br><br><h5>Relatório de Sincronização</h5><hr>Buscando por clientes ainda não cadastrados...<br><br>";
 
         //buscando clientes no omie
 		$i = 1;
@@ -108,44 +110,52 @@ class ClienteController extends Controller
         //$log .=  "Registros nessa página : " . print_r($retornoOmie->registros, true) . "<br>";
         //$log .=  "Total de Registros : " . print_r($retornoOmie->total_de_registros, true) . "<br>";
           
-        echo  "<pre>" . print_r($arrayClientes, true);
+        //echo  "<pre>" . print_r($arrayClientes, true);
 
-        $logUpdate =  "<b><h5>Buscando por Clientes desatualizados...</h5></b>";
+        $logUpdate =  "Buscando por Clientes desatualizados...<br><br>";
+        $clientesAtualizados = 0;
+        $clientesCadastrados = 0;
 
         foreach ($arrayClientes as $key => $clienteOmie) {
             $clienteBase = Cliente::where('codigo_cliente_omie', "=", $clienteOmie['codigo_cliente_omie'])->first();
             if (isset($clienteBase->id)) {
-                $logCadastro .= "Cliente ". $clienteOmie['razao_social'] ." já cadastrado na ID ". $clienteBase->id ."... Procurando por atualizações:<br>";
                 $lastUpdateOmie = $clienteOmie['data_Alt'];
                 $lastUpdateBase = Cliente::where('id', "=", $clienteBase->id)->first();
-                $logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";  
-                if (strtotime($lastUpdateOmie) > strtotime($lastUpdateBase)) {
-                    $updatedId = $this->update($clienteOmie); 
-                    $logUpdate .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " atualizado com sucesso!"."<br>";
-                } elseif (strtotime($lastUpdateOmie) <= strtotime($lastUpdateBase)) {
-                    $logUpdate .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " já estava atualizado <br>";
+                //$logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";  
+                $dtOmie = strtotime($lastUpdateOmie);
+                $dtBase = strtotime($lastUpdateBase->updated_at);
+                $agora = new DateTime();
+                if ($dtOmie > $dtBase) {
+                    //$logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";
+                    $updatedId = $this->update($clienteOmie);
+                    $clientesAtualizados++;
+                    $logUpdate .= "> Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " atualizado com sucesso!<br>";
                 }
+                //else {
+                //}
             } else {
                 $insertedId = $this->insert($clienteOmie);
-                $logCadastro .= "Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " inserido com a ID ".$insertedId."<br>";
+                $clientesCadastrados++;
+                $logCadastro .= "> Novo Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " cadastrado com a ID ".$insertedId."<br>";
             }
-           //$insert = $this->insert($cliente);
-           //echo "Cliente ".$cliente['codigo_cliente_omie']." - ".$cliente['razao_social']. "inserido com a ID ".$insert->last_insert_id."<hr>";
         }
-        $logCadastro .= "<b><h5>Cadastro finalizado</h5></b><hr>";
-        
 
-        //$clientesBase = Cliente::
-        //foreach ($arrayClientes as $key => $clienteOmie) {
-        //    # code...
-        //}
+        if ($clientesCadastrados == 0) {
+            $logCadastro .= "<b>Não foram encontrados novos registros.</b><hr>";
+        } else {
+            $logCadastro .= "<br><b>Total de ".$clientesCadastrados." clientes cadastrados.</b><hr>";
+        }
+        if ($clientesAtualizados == 0) {
+            $logUpdate .= "<b>Não foram encontrados registros desatualizados.</b><hr>";
+        } else {
+            $logUpdate .= "<br><b>Total de ".$clientesAtualizados." clientes atualizados.</b><hr>";
+        }
 
-        $logUpdate .= "<b><h5>Atualizações finalizadas.</h5></b><hr>";
         $tempo_fim = microtime( true );
-        $tempo_execucao = ($tempo_fim - $tempo_inicio);
-        $logCompleto = '<b><h5>Tempo de Execução:</h5></b> '.$tempo_execucao.' Segs <hr>';
-        $logCompleto .= $logCadastro;
+        $tempo_execucao = substr((($tempo_fim - $tempo_inicio)/60), 0, 4);
+        $logCompleto = $logCadastro;
         $logCompleto .= $logUpdate;
+        $logCompleto .= 'Tempo de Execução: '.$tempo_execucao.' min.';
         echo $logCompleto; //para aparecer na tela
     }
 

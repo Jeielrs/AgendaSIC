@@ -24,16 +24,17 @@
             })
             .always(function(){
               $("#carregando").hide();
+              $("#goback").hide();
             });
         });
     </script>
-    <div class="m-2">
-        <div class="row">
+    <div class="ml-3 mr-3">
+        <div class="row color-clientes">
             <div class="col-md-6">
-              <h3 class="titulo-rota">Clientes > Sincronizar</h3>
+              <h3 class="titulo-rota mt-2">Clientes > Sincronizar</h3>
             </div>
             <div class="col-md-6 text-right">
-                <a href="/clientes" type="button" class="mt-2 mb-2 btn btn-primary">Voltar</a>
+                <a href="/clientes" type="button" class="mt-2 mb-2 btn btn-warning" id="goback">Voltar</a>
             </div>
         </div>
     </div>

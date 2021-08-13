@@ -46,7 +46,7 @@
             <br>
             <img src="{{URL::asset('img/cubomagico.gif')}}" class="rounded mx-auto d-block">
             <div class="container-progress-bar">
-                <div class="progress-bar-clientes"></div>
+                <div class="progress-bar"></div>
             </div>
             <br>
             <p class="text-center text-danger">Por favor, aguarde a barra de progresso chegar ao fim para sair dessa página!</p>

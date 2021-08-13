@@ -217,7 +217,6 @@
           },
           {
             width: "10%",
-            className: 'text-center',
             data: 'status',
             name: 'status'
           },

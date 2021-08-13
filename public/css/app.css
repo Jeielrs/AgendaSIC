@@ -25,8 +25,12 @@ h3.titulo-rota {
 	background-color: #9ba0e581;
 }
 
+.color-servicos {
+	background-color: #9eff86a9;
+}
+
 .color-tecnicos {
-	background-color: #b3ffb68a;
+	background-color: #ffb3b38a;
 }
 
 .color-veiculos {
@@ -87,3 +91,36 @@ h3.titulo-rota {
 	color: #0B0B3B;
 	font-weight: bold;
 }
+
+/*PROGRESS-BAR*/
+.container-progress-bar {
+	height: 15px;
+	background-color: #CCC;
+	position: relative;
+	border-radius: 5px;
+}
+
+.container-progress-bar .progress-bar-clientes {
+	position: absolute;
+	height: 100%;
+	background-color: rgb(254,218,185,255);
+	border-radius: 5px;
+	animation: progress-animation 150s forwards;
+}
+.container-progress-bar .progress-bar-servicos {
+	position: absolute;
+	height: 100%;
+	background-color: #9eff86a9;
+	border-radius: 5px;
+	animation: progress-animation 15s forwards;
+}
+
+#play-animation {
+	
+}
+
+@keyframes progress-animation {
+	0% { width: 0%;}
+	100% {width: 100%;}
+}
+/*PROGRESS-BAR*/

@@ -84,7 +84,7 @@ class ClienteController extends Controller
     {
         $tempo_inicio = microtime( true );
 
-        $logCadastro = "<br><br><h5>Relatório de Sincronização</h5><hr>Buscando por clientes ainda não cadastrados...<br><br>";
+        $logCadastro = "<br><br><h5 class='text-center'>Relatório de Sincronização</h5><hr>Buscando por clientes ainda não cadastrados...<br><br>";
 
         //buscando clientes no omie
 		$i = 1;
@@ -121,14 +121,13 @@ class ClienteController extends Controller
             if (isset($clienteBase->id)) {
                 $lastUpdateOmie = $clienteOmie['data_Alt'];
                 $lastUpdateBase = Cliente::where('id', "=", $clienteBase->id)->first();
-                //$logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";  
                 $dtOmie = strtotime($lastUpdateOmie);
                 $dtBase = strtotime($lastUpdateBase->updated_at);
                 $agora = new DateTime();
                 if ($dtOmie > $dtBase) {
-                    //$logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";
                     $updatedId = $this->update($clienteOmie);
                     $clientesAtualizados++;
+                    //$logUpdate .= "Update Omie = ".$lastUpdateOmie." ///// Update Base = ".$lastUpdateBase->updated_at."<br>";
                     $logUpdate .= "> Cliente ".$clienteOmie['codigo_cliente_omie']." - ".$clienteOmie['razao_social']. " atualizado com sucesso!<br>";
                 }
                 //else {
@@ -291,17 +290,6 @@ class ClienteController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function teste()
-    {
-        echo "teste";
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -310,11 +298,7 @@ class ClienteController extends Controller
      */
     public function update($array)
     {
-        //echo "salve<br>";
-        //print_r($array);
         $cliente = Cliente::where('codigo_cliente_omie', "=", $array['codigo_cliente_omie'])->first();
-        //echo "<br>salvado<br>";
-        //print_r($cliente);exit();
         $cliente->codigo_cliente_omie = $array['codigo_cliente_omie'];
         $cliente->status = $array['status'];
         $cliente->segmento = $array['segmento'];
@@ -329,19 +313,9 @@ class ClienteController extends Controller
         $cliente->email = $array['email'];
         $cliente->observacao = $array['observacao'];
         $cliente->pessoa_fisica = $array['pessoa_fisica'];
+        $cliente->updated_at = $array['data_Alt'];
         $cliente->save();
         $updatedId = $cliente->id;
         return $updatedId;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

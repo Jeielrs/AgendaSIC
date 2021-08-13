@@ -41,12 +41,11 @@ Route::post('padroes/create', [PadraoController::class, 'insert'])->name('padroe
 Route::post('padroes/update', [PadraoController::class, 'update'])->name('padroes.update');
 Route::get('padroes/destroy/{id}', [PadraoController::class, 'destroy']);
 
-Route::get('servicos', [ServicoController::class, 'index']);
-Route::get('servicos/create', [ServicoController::class, 'create']);
-Route::post('servicos', [ServicoController::class, 'insert'])->name('servicos.insert');
-Route::get('servicos/show/{id}', [ServicoController::class, 'show'])->name('servicos.show');
-Route::get('servicos/edit/{id}', [ServicoController::class, 'edit'])->name('servicos.edit');
-Route::get('servicos/delete/{id}', [ServicoController::class, 'delete'])->name('servicos.delete');
+Route::get('servicos', [ServicoController::class, 'index'])->name('servicos.index');
+Route::get('servicos/{id}/show', [ServicoController::class, 'show']);
+Route::get('servicos/synchronize', [ServicoController::class, 'synchronize']);
+Route::get('servicos/sync', [ServicoController::class, 'sync'])->name('servicos.sync');
+Route::resource('servicos', ServicoController::class);
 
 Route::resource('veiculos', VeiculoController::class);
 Route::get('veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');

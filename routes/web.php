@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\manager\DashboardController as ManagerDashboardController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PadraoController;
 use App\Http\Controllers\PainelController;
@@ -24,6 +25,15 @@ Route::post('painel', [UsuarioController::class, 'login'])->name('usuarios.login
 Route::get('logout', [UsuarioController::class, 'logout'])->name('usuarios.logout');
 
 Route::get('painel', [PainelController::class, 'index']);
+
+//Route::resource('agendamentos', AgendamentoController::class);
+Route::get('agendamentos', [AgendamentoController::class, 'index'])->name('agendamentos.index');
+Route::get('agendamentos/{id}/show', [AgendamentoController::class, 'show']);
+Route::get('agendamentos/create', [AgendamentoController::class, 'create']);
+Route::get('agendamentos/loadservices', [AgendamentoController::class, 'loadservices'])->name('agendamentos.loadservices');
+Route::post('agendamentos/create', [AgendamentoController::class, 'insert'])->name('agendamentos.insert');
+Route::post('agendamentos/update', [AgendamentoController::class, 'update'])->name('agendamentos.update');
+Route::get('agendamentos/destroy/{id}', [AgendamentoController::class, 'destroy']);
 
 Route::resource('tecnicos', TecnicoController::class);
 Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos.index');

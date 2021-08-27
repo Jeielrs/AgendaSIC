@@ -21,6 +21,7 @@
                 <th>ID</th>
                 <th>Razão Social</th>
                 <th>CNPJ / CPF</th>
+                <th>Segmento</th>
                 <th>E-mail</th>
                 <th>Status</th>
                 <th>Ação</th>
@@ -201,17 +202,24 @@
           },
           {
             width: "25%",
-            className: 'text-center',
             data: 'razao_social',
             name: 'razao_social'
           },
           {
-            width: "25%",
+            width: "10%",
+            className: 'text-center',
             data: 'cnpj_cpf',
             name: 'cnpj_cpf'
           },
           {
+            width: "15%",
+            className: 'text-center',
+            data: 'segmento',
+            name: 'segmento'
+          },
+          {
             width: "25%",
+            className: 'text-center',
             data: 'email',
             name: 'email'
           },

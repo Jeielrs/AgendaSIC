@@ -15,6 +15,8 @@
                 <br>- Para chamar uma rota no blade precisa que ela esteja renomeada e seja chamada assim: <?php echo "{{route('nome.rota')}}"; ?>
                 
                 </p>
+
+                <a href="/agendar" type="button" class="mt-2 mb-2 btn btn-dark text-white" id="agendar">AGENDAR</a>
             </div>
         </div>
 

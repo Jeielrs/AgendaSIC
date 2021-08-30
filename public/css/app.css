@@ -124,3 +124,18 @@ h3.titulo-rota {
 	100% {width: 100%;}
 }
 /*PROGRESS-BAR*/
+
+@media(min-width: 770px){
+	#numitens_servicos {
+		transform: translateX(-80px);
+	}
+	#numitens_tecnicos {
+		transform: translateX(-80px);
+	}
+	#numitens_padroes {
+		transform: translateX(-80px);
+	}
+	#numitens_veiculos {
+		transform: translateX(-80px);
+	}
+}

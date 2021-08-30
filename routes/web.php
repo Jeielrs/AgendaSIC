@@ -31,6 +31,9 @@ Route::get('agendamentos', [AgendamentoController::class, 'index'])->name('agend
 Route::get('agendamentos/{id}/show', [AgendamentoController::class, 'show']);
 Route::get('agendamentos/create', [AgendamentoController::class, 'create']);
 Route::get('agendamentos/loadservices', [AgendamentoController::class, 'loadservices'])->name('agendamentos.loadservices');
+Route::get('agendamentos/loadtecnicos', [AgendamentoController::class, 'loadtecnicos'])->name('agendamentos.loadtecnicos');
+Route::get('agendamentos/loadpadroes', [AgendamentoController::class, 'loadpadroes'])->name('agendamentos.loadpadroes');
+Route::get('agendamentos/loadveiculos', [AgendamentoController::class, 'loadveiculos'])->name('agendamentos.loadveiculos');
 Route::post('agendamentos/create', [AgendamentoController::class, 'insert'])->name('agendamentos.insert');
 Route::post('agendamentos/update', [AgendamentoController::class, 'update'])->name('agendamentos.update');
 Route::get('agendamentos/destroy/{id}', [AgendamentoController::class, 'destroy']);

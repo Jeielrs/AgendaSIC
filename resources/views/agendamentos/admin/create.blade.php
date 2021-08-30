@@ -65,65 +65,51 @@
                         </div>                        
                     </div>
                     <div class="container">
-                        <label class="labelform mt-2 mb-0">Cliente:</label>
-                        <input type="search" name="cliente" list="cliente" placeholder="Pesquisar clientes..." class="custom-select" required>
-                        <datalist id="cliente">
-                            @foreach ($clientes as $cliente)
-                                <option value="{{$cliente->id." - ".$cliente->nome_fantasia}}"></option>
-                            @endforeach
-                        </datalist>
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <label class="labelform mt-2 mb-0">Cliente:</label>
+                                <input type="search" name="cliente" list="cliente" placeholder="Pesquisar clientes..." class="custom-select" required>
+                                <datalist id="cliente">
+                                    @foreach ($clientes as $cliente)
+                                        <option value="{{$cliente->id." | ".$cliente->nome_fantasia}}"></option>
+                                    @endforeach
+                                </datalist>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="labelform mt-2 mb-0">Contato:</label>
+                                <input type="text" name="contato" class="form-control" required>
+                            </div>
+                        </div>                        
                     </div>
-                    <div class="container" id="pergunta"> {{--serviços---}}
-                        <div id="form">
-                              <label class='labelform mt-2 mb-0 text-start'>Quantos serviços diferentes deseja adicionar?</label>
-                            
-                              <select class="form-control col-2" id="numitens">
-                                @for ($i = 0; $i <= 10; $i++)
-                                <option value="{{$i}}">{{$i}}</option>
-                                @endfor
-                              </select>
-                              <input type="hidden" id="numeroitens" name="numitens"> <!-- p/ receber name via jquery no ajax.js-->
+                    
+                    <div id="servicos">
+                        <div class="container" id="pergunta_servicos">
+                            <label class="labelform mt-2 mb-0">Serviços:</label>
+                            <div id="form" class="row">
+                                <div class="col-8">
+                                    <label class='labelform mt-2 mb-0 text-start'>Quantos serviços diferentes deseja adicionar?</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-control" id="numitens_servicos">
+                                        @for ($i = 0; $i <= 10; $i++)
+                                            <option value="{{$i}}">{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                    <input type="hidden" id="numeroitens_servicos" name="numitens_servicos"> <!-- p/ receber name via jquery no ajax.js-->
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="container" id="loading" style="display: none;">
-                        <img src="{{URL::asset('img/loading2.gif')}}" class="rounded mx-auto d-block">
-                        <h3 class="text-center">Carregando Serviços...</h3>
-                    </div>
-                    <div class="container" id="content"></div>
-                    <script type="text/javascript">
-                        $("#numitens").on('change', function(e){
-                            let numitens = $(e.target).val()
-                            $("#pergunta").hide();
-                            console.log('fechou');
-                            e.preventDefault();  //->ativado pois evita o comportamento padrão
-                            $("#loading").show(); // exibe o loading na div #carregando
-                            //iniciando a requisição Ajax
-                            $("#numeroitens").attr('value', numitens) //atribui o value de numitens no input hidden do form
-                            console.log($('#numeroitens')[0]['value']);
-                            $.ajax({
-                                type: 'GET',
-                                url: '{{ route('agendamentos.loadservices') }}',
-                                data:`numitens=${numitens}`,
-                                dataType: "html"        
-                            })
-                            .done(function(data){
-                                $("#content").html(data);
-                                console.log('carregado');
-                            })
-                            .fail(function(data){
-                                alert("Erro na requisição Ajax");
-                            })
-                            .always(function(){
-                                $("#loading").hide();
-                            });
-                        });
-                    </script>
-
+                        <div class="container" id="loading_servicos" style="display: none;">
+                            <img src="{{URL::asset('img/loading2.gif')}}" class="rounded mx-auto d-block">
+                        </div>
+                        <div class="container" id="content_servicos"></div>
+                    </div>                    
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Observação:</label>
                         <textarea name="observacao" rows="1" class="form-control" pattern="[a-zA-Z0-9]+"></textarea>
                     </div>
                 </div>
+
                 <div class="col-lg-6">
                     <div class="container">
                         <div class="row">
@@ -202,9 +188,7 @@
                                     <label class="form-check-label" for="sabado">Sábado</label>
                                 </div>
                             </div>
-                        </div>                            
-                    </div>
-                    <div class="container">
+                        </div>
                         <div class="row">
                             <div class="col-lg-4">
                                 <label class="labelform mt-2 mb-0">Início:</label>
@@ -220,6 +204,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <script type="text/javascript">
                         $("#tipo_agendamento").on('change', function(e){
                             let tipo = $(e.target).val()
@@ -235,44 +220,196 @@
                             }
                         });
                     </script>
-                    <div class="container">
-                        <label class="labelform mt-2 mb-0">Padrões:</label>
-                        <input type="search" name="padrao" list="padrao" placeholder="Pesquisar padrões..." class="custom-select" required>
-                        <datalist id="padrao">
-                            @foreach ($padroes as $padroes)
-                                <option value="{{$padroes->id." - ".$padroes->tag}}"></option>
-                            @endforeach
-                        </datalist>
-                    </div>
-                    <div class="container">
-                        <label class="labelform mt-2 mb-0">Técnicos:</label>
-                        <input type="search" name="tecnico" list="tecnico" placeholder="Pesquisar técnicos..." class="custom-select" required>
-                        <datalist id="tecnico">
-                            @foreach ($tecnicos as $tecnico)
-                                <option value="{{$tecnico->id." - ".$tecnico->name}}"></option>
-                            @endforeach
-                        </datalist>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label class="labelform mt-2 mb-0">Contato:</label>
-                                <input type="text" name="contato" class="form-control" required>
+
+                    <div id="tecnicos">
+                        <div class="container" id="pergunta_tecnicos">
+                            <label class="labelform mt-2 mb-0">Técnicos:</label>
+                            <div id="form" class="row">
+                                <div class="col-8">
+                                    <label class='labelform mt-2 mb-0 text-start'>Quantos técnicos diferentes deseja adicionar?</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-control" id="numitens_tecnicos">
+                                        @for ($i = 0; $i <= 10; $i++)
+                                            <option value="{{$i}}">{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                    <input type="hidden" id="numeroitens_tecnicos" name="numitens_tecnicos"> <!-- p/ receber name via jquery no ajax.js-->
+                                </div>
                             </div>
-                            <div class=" col-lg-6 text-center">
-                                <label class="labelform mt-2 mb-0">Veículo:</label>
-                                <input type="search" name="veiculo" list="veiculo" placeholder="Pesquisar veículos..." class="custom-select" required>
-                                <datalist id="veiculo">
-                                    {{--@foreach ($veiculos as $veiculo)
-                                        <option value="{{$veiculo->vehicle_plate." - ".$veiculo->brand. " ".$veiculo->model}}"></option>
-                                    @endforeach--}}
-                                </datalist>
-                            </div> 
-                        </div>                        
+                        </div>
+                        <div class="container" id="loading_tecnicos" style="display: none;">
+                            <img src="{{URL::asset('img/loading2.gif')}}" class="rounded mx-auto d-block">
+                        </div>
+                        <div class="container" id="content_tecnicos"></div>
+                    </div>
+                    <div id="padroes">
+                        <div class="container" id="pergunta_padroes">
+                            <label class="labelform mt-2 mb-0">Padrões:</label>
+                            <div id="form" class="row">
+                                <div class="col-8">
+                                    <label class='labelform mt-2 mb-0 text-start'>Quantos padrões diferentes deseja adicionar?</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-control" id="numitens_padroes">
+                                        @for ($i = 0; $i <= 10; $i++)
+                                            <option value="{{$i}}">{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                    <input type="hidden" id="numeroitens_padroes" name="numitens_padroes"> <!-- p/ receber name via jquery no ajax.js-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container" id="loading_padroes" style="display: none;">
+                            <img src="{{URL::asset('img/loading2.gif')}}" class="rounded mx-auto d-block">
+                        </div>
+                        <div class="container" id="content_padroes"></div>
+                    </div>
+                    <div id="veiculos">
+                        <div class="container" id="pergunta_veiculos">
+                            <label class="labelform mt-2 mb-0">Veículos:</label>
+                            <div id="form" class="row">
+                                <div class="col-8">
+                                    <label class='labelform mt-2 mb-0 text-start'>Quantos veículos diferentes deseja adicionar?</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-control" id="numitens_veiculos">
+                                        @for ($i = 0; $i <= 10; $i++)
+                                            <option value="{{$i}}">{{$i}}</option>
+                                        @endfor
+                                    </select>
+                                    <input type="hidden" id="numeroitens_veiculos" name="numitens_veiculos"> <!-- p/ receber name via jquery no ajax.js-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container" id="loading_veiculos" style="display: none;">
+                            <img src="{{URL::asset('img/loading2.gif')}}" class="rounded mx-auto d-block">
+                        </div>
+                        <div class="container" id="content_veiculos"></div>
                     </div>
                 </div>
+                <div class="container">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success mt-4" name="">Cadastrar</button>
+                    </div>                    
+                </div> 
             </div>
         </form>
     </div>
+    <script type="text/javascript">
+        $("#numitens_servicos").on('change', function(e){
+            let numitens = $(e.target).val()
+            $("#pergunta_servicos").hide();
+            console.log('fechou');
+            e.preventDefault();  //->ativado pois evita o comportamento padrão
+            $("#loading_servicos").show(); // exibe o loading na div #carregando
+            //iniciando a requisição Ajax
+            $("#numeroitens_servicos").attr('value', numitens) //atribui o value de numitens no input hidden do form
+            console.log($('#numeroitens_servicos')[0]['value']);
+            $.ajax({
+                type: 'GET',
+                url: '{{ route('agendamentos.loadservices') }}',
+                data:`numitens=${numitens}`,
+                dataType: "html"        
+            })
+            .done(function(data){
+                $("#content_servicos").html(data);
+                console.log('carregado');
+            })
+            .fail(function(data){
+                alert("Erro na requisição Ajax");
+            })
+            .always(function(){
+                $("#loading_servicos").hide();
+            });
+        });        
+    </script>
+
+    <script type="text/javascript">
+        $("#numitens_padroes").on('change', function(e){
+            let numitens = $(e.target).val()
+            $("#pergunta_padroes").hide();
+            console.log('fechou');
+            e.preventDefault();  //->ativado pois evita o comportamento padrão
+            $("#loading_padroes").show(); // exibe o loading na div #carregando
+            //iniciando a requisição Ajax
+            $("#numeroitens_padroes").attr('value', numitens) //atribui o value de numitens no input hidden do form
+            console.log($('#numeroitens_padroes')[0]['value']);
+            $.ajax({
+                type: 'GET',
+                url: '{{ route('agendamentos.loadpadroes') }}',
+                data:`numitens=${numitens}`,
+                dataType: "html"        
+            })
+            .done(function(data){
+                $("#content_padroes").html(data);
+                console.log('carregado');
+            })
+            .fail(function(data){
+                alert("Erro na requisição Ajax");
+            })
+            .always(function(){
+                $("#loading_padroes").hide();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $("#numitens_tecnicos").on('change', function(e){
+            let numitens = $(e.target).val()
+            $("#pergunta_tecnicos").hide();
+            console.log('fechou');
+            e.preventDefault();  //->ativado pois evita o comportamento padrão
+            $("#loading_tecnicos").show(); // exibe o loading na div #carregando
+            //iniciando a requisição Ajax
+            $("#numeroitens_tecnicos").attr('value', numitens) //atribui o value de numitens no input hidden do form
+            console.log($('#numeroitens_tecnicos')[0]['value']);
+            $.ajax({
+                type: 'GET',
+                url: '{{ route('agendamentos.loadtecnicos') }}',
+                data:`numitens=${numitens}`,
+                dataType: "html"        
+            })
+            .done(function(data){
+                $("#content_tecnicos").html(data);
+                console.log('carregado');
+            })
+            .fail(function(data){
+                alert("Erro na requisição Ajax");
+            })
+            .always(function(){
+                $("#loading_tecnicos").hide();
+            });
+        });
+    </script>
+
+<script type="text/javascript">
+    $("#numitens_veiculos").on('change', function(e){
+        let numitens = $(e.target).val()
+        $("#pergunta_veiculos").hide();
+        console.log('fechou');
+        e.preventDefault();  //->ativado pois evita o comportamento padrão
+        $("#loading_veiculos").show(); // exibe o loading na div #carregando
+        //iniciando a requisição Ajax
+        $("#numeroitens_veiculos").attr('value', numitens) //atribui o value de numitens no input hidden do form
+        console.log($('#numeroitens_veiculos')[0]['value']);
+        $.ajax({
+            type: 'GET',
+            url: '{{ route('agendamentos.loadveiculos') }}',
+            data:`numitens=${numitens}`,
+            dataType: "html"        
+        })
+        .done(function(data){
+            $("#content_veiculos").html(data);
+            console.log('carregado');
+        })
+        .fail(function(data){
+            alert("Erro na requisição Ajax");
+        })
+        .always(function(){
+            $("#loading_veiculos").hide();
+        });
+    });
+</script>
     
 @endsection

@@ -79,6 +79,7 @@ class TecnicoController extends Controller
 
     public function insert(Request $request)
     {   #o que vem da request é atribuido na classe tecnico
+        //print_r($request); exit();
         $tecnico = new Tecnico();
         $tecnico->name = $request->nome;
         $tecnico->birth = $request->nascimento;

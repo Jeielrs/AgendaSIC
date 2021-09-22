@@ -13,10 +13,13 @@
                 <p>
                     - No blade, para buscar algum arquivo na public, usar o asset: <?php echo '{{URL::asset()}}'; ?>
                 <br>- Para chamar uma rota no blade precisa que ela esteja renomeada e seja chamada assim: <?php echo "{{route('nome.rota')}}"; ?>
-                
+                <br>- Para obtenção de dados da request:<br>
+                    print_r(request()->post());
+                    ou 
+                    dd($request->all());
                 </p>
 
-                <a href="/agendar" type="button" class="mt-2 mb-2 btn btn-dark text-white" id="agendar">AGENDAR</a>
+                <a href="/agendamentos/create" type="button" class="mt-2 mb-2 btn btn-dark text-white" id="agendar">AGENDAR</a>
             </div>
         </div>
 

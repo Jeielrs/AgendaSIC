@@ -127,15 +127,15 @@ h3.titulo-rota {
 
 @media(min-width: 770px){
 	#numitens_servicos {
-		transform: translateX(-80px);
+		transform: translateX(-70px);
 	}
 	#numitens_tecnicos {
-		transform: translateX(-80px);
+		transform: translateX(-70px);
 	}
 	#numitens_padroes {
-		transform: translateX(-80px);
+		transform: translateX(-70px);
 	}
 	#numitens_veiculos {
-		transform: translateX(-80px);
+		transform: translateX(-70px);
 	}
 }

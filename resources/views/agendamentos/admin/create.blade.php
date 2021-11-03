@@ -14,6 +14,15 @@
         </div>
     </div>
     <div class="m-3" id="formulario">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('agendamentos.insert')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row form-group">
@@ -77,7 +86,7 @@
                             </div>
                             <div class="col-lg-3">
                                 <label class="labelform mt-2 mb-0">Contato:</label>
-                                <input type="text" name="contato" class="form-control" required>
+                                <input type="text" name="contato" class="form-control">
                             </div>
                         </div>                        
                     </div>
@@ -115,7 +124,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Protocolo:</label>
-                                <input type="text" name="protocolo" class="form-control" required>
+                                <input type="text" name="protocolo" class="form-control">
                             </div>
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Hospedagem:</label>
@@ -130,7 +139,7 @@
                     </div>
                     <div class="container">
                         <label class="labelform mt-2 mb-0">Tipo de Agendamento:</label>
-                        <select name="tipo_agendamento" id="tipo_agendamento" class="form-control" required>
+                        <select name="tipo_agendamento" id="tipo_agendamento" class="form-control">
                             <option selected>Selecionar</option>
                             <option value="manual">Manual</option>
                             <option value="recorrente">Recorrente</option>
@@ -139,16 +148,16 @@
                     <div id="agendamento_manual" class="container" style="display: none">
                         <div class="row">
                             <div class="col-lg-4">
-                                <label class="labelform mt-2 mb-0">Início:</label>
-                                <input type="date" name="inicio" class="form-control">
+                                <label class="labelform mt-2 mb-0">Data:</label>
+                                <input type="date" name="data" id="data" class="form-control">
                             </div>
                             <div class="col-lg-4">
-                                <label class="labelform mt-2 mb-0">Fim:</label>
-                                <input type="date" name="fim" class="form-control">
+                                <label class="labelform mt-2 mb-0">Horário Início:</label>
+                                <input type="time" name="horario_inicio_manual" id="horario_inicio_manual" min="06:00" class="form-control" >
                             </div>
                             <div class="col-lg-4">
                                 <label class="labelform mt-2 mb-0">Tempo de Serviço:</label>
-                                <input type="time" name="tempo_servico" min="05:00" class="form-control" required>
+                                <input type="time" name="tempo_servico_manual" id="tempo_servico_manual" min="05:00" class="form-control" >
                             </div>
                         </div>
                     </div>
@@ -156,51 +165,59 @@
                         <label class="labelform mt-2 mb-0">Selecione a recorrência:</label>
                         <br>
                         <div class="row">                                
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="segunda" value="segunda">
+                                    <input class="form-check-input" type="checkbox" name="segunda" id="segunda" value="segunda">
                                     <label class="form-check-label" for="segunda">Segunda-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="quarta" value="quarta">
-                                    <label class="form-check-label" for="quarta">Quarta-feira</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="sexta" value="sexta">
-                                    <label class="form-check-label" for="sexta">Sexta-feira</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="domingo" value="domingo">
-                                    <label class="form-check-label" for="domingo">Domingo</label>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terca" value="terca">
-                                    <label class="form-check-label" for="terca">Terça-feira</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="quinta" value="quinta">
+                                    <input class="form-check-input" type="checkbox" name="quinta" id="quinta" value="quinta">
                                     <label class="form-check-label" for="quinta">Quinta-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="sabado" value="sabado">
+                                    <input class="form-check-input" type="checkbox" name="domingo" id="domingo" value="domingo">
+                                    <label class="form-check-label" for="domingo">Domingo</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="terca" id="terca" value="terca">
+                                    <label class="form-check-label" for="terca">Terça-feira</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sexta" id="sexta" value="sexta">
+                                    <label class="form-check-label" for="sexta">Sexta-feira</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="quarta" id="quarta" value="quarta">
+                                    <label class="form-check-label" for="quarta">Quarta-feira</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sabado" id="sabado" value="sabado">
                                     <label class="form-check-label" for="sabado">Sábado</label>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-8">
                                 <label class="labelform mt-2 mb-0">Início:</label>
-                                <input type="date" name="inicio" class="form-control">
+                                <input type="date" name="inicio_recorrente" id="inicio_recorrente" class="form-control">
                             </div>
                             <div class="col-lg-4">
+                                <label class="labelform mt-2 mb-0">Horario Início:</label>
+                                <input type="time" name="horario_inicio_recorrente" id="horario_inicio_recorrente" min="06:00" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">                            
+                            <div class="col-lg-8">
                                 <label class="labelform mt-2 mb-0">Fim:</label>
-                                <input type="date" name="fim" class="form-control">
+                                <input type="date" name="fim_recorrente" id="fim_recorrente" class="form-control">
                             </div>
                             <div class="col-lg-4">
                                 <label class="labelform mt-2 mb-0">Tempo de Serviço:</label>
-                                <input type="time" name="tempo_servico" min="05:00" class="form-control" required>
+                                <input type="time" name="tempo_servico_recorrente" id="tempo_servico_recorrente" min="05:00" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -215,8 +232,29 @@
                             //e.preventDefault();
                             if (tipo == 'manual') {
                                 $("#agendamento_manual").show();
+
+                                $("#inicio_manual").attr("required", "true");
+                                $("#horario_inicio_manual").attr("required", "true");
+                                $("#fim_manual").attr("required", "true");
+                                $("#tempo_servico_manual").attr("required", "true");
+
+                                $("#inicio_recorrente").removeAttr("required", "true");
+                                $("#horario_inicio_recorrente").removeAttr("required", "true");
+                                $("#fim_recorrente").removeAttr("required", "true");
+                                $("#tempo_servico_recorrente").removeAttr("required", "true");
+
                             }else if (tipo == 'recorrente') {
                                 $("#agendamento_recorrente").show();
+
+                                $("#inicio_recorrente").attr("required", "true");
+                                $("#horario_inicio_recorrente").attr("required", "true");
+                                $("#fim_recorrente").attr("required", "true");
+                                $("#tempo_servico_recorrente").attr("required", "true");
+
+                                $("#inicio_manual").removeAttr("required", "true");
+                                $("#horario_inicio_manual").removeAttr("required", "true");
+                                $("#fim_manual").removeAttr("required", "true");
+                                $("#tempo_servico_manual").removeAttr("required", "true");
                             }
                         });
                     </script>

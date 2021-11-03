@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAgendamentoRequest;
 use App\Jobs\AtualizaStatusPadrao;
 use App\Models\Agendamento;
+use App\Models\Ativadores;
 use App\Models\Cliente;
 use App\Models\Padrao;
 use App\Models\Servico;
 use App\Models\Tecnico;
 use App\Models\Veiculo;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Echo_;
 
 class AgendamentoController extends Controller
@@ -157,38 +161,37 @@ class AgendamentoController extends Controller
         $protocolo = $request->protocolo;
         $hospedagem = $request->hospedagem;
         $tipo_agendamento = $request->tipo_agendamento;
-        $inicio = ($tipo_agendamento == "manual")?$request->inicio_manual:$request->inicio_recorrente;
-        $fim = ($tipo_agendamento == "manual")?$request->fim_manual:$request->fim_recorrente;
+        $inicio = ($tipo_agendamento == "manual")?$request->data:$request->inicio_recorrente;
+        $fim = ($tipo_agendamento == "manual")?$request->data:$request->fim_recorrente;
         $horario_inicio = ($tipo_agendamento == "manual")?$request->horario_inicio_manual:$request->horario_inicio_recorrente;      
         $tempo_servico = ($tipo_agendamento == "manual")?$request->tempo_servico_manual:$request->tempo_servico_recorrente;
         $v = explode(':', $tempo_servico);
         $horario_fim = date('H:i', strtotime("{$horario_inicio} + {$v[0]} hours {$v[1]} minutes"));
-
+        //cria a variável $dias da semana que armazena os dias selecionados
         if ($tipo_agendamento == "recorrente") {
-            if ($request->segunda = "segunda") {
-                $dias_semana[] = ['segunda'];
+            if ($request->mon == "segunda") {
+                $dias_semana[] = 'mon';
             }
-            if ($request->terca = "terca") {
-                $dias_semana[] = ['terca'];
+            if ($request->tue == "terca") {
+                $dias_semana[] = 'tue';
             }
-            if ($request->quarta = "quarta") {
-                $dias_semana[] = ['quarta'];
+            if ($request->wed == "quarta") {
+                $dias_semana[] = 'wed';
             }
-            if ($request->quinta = "quinta") {
-                $dias_semana[] = ['quinta'];
+            if ($request->thu == "quinta") {
+                $dias_semana[] = 'thu';
             }
-            if ($request->sexta = "sexta") {
-                $dias_semana[] = ['sexta'];
+            if ($request->fri == "sexta") {
+                $dias_semana[] = 'fri';
             }
-            if ($request->sabado = "sabado") {
-                $dias_semana[] = ['sabado'];
+            if ($request->sat == "sabado") {
+                $dias_semana[] = 'sat';
             }
-            if ($request->domingo = "domingo") {
-                $dias_semana[] = ['domingo'];
+            if ($request->sun == "domingo") {
+                $dias_semana[] = 'sun';
             }
         }
-
-        dd($dias_semana);exit();
+        //dd($dias_semana);exit();
 
         $array_id_servicos = array();
         $array_qtd_servicos = array();
@@ -249,6 +252,7 @@ class AgendamentoController extends Controller
         $agendamento->tempo_servico = $tempo_servico;
         $agendamento->horario_inicio = $horario_inicio;
         $agendamento->horario_fim = $horario_fim;
+        $agendamento->dias_semana = $dias_semana;
         $agendamento->tipo_servico = $tipo_servico;
         $agendamento->tipo_contrato = $tipo_contrato;
         $agendamento->tipo_agendamento = $tipo_agendamento;
@@ -258,6 +262,10 @@ class AgendamentoController extends Controller
         $agendamento->hospedagem = $hospedagem;
         $agendamento->contato = $contato;
         $agendamento->numitens_servicos = $numitens_servicos;
+        
+        if (!is_null($agendamento->dias_semana)) {
+            $agendamento->dias_semana = implode("|", $dias_semana);
+        }
 
         if ($numitens_servicos > 0) {
             $agendamento->qtd_servicos = implode("|", $array_qtd_servicos);
@@ -278,15 +286,42 @@ class AgendamentoController extends Controller
         $agendamento->id_cliente = $id_cliente;
         $agendamento->obs = $observacao;
 
-        AtualizaStatusPadrao::dispatch($agendamento->id_padrao);
+        //AtualizaStatusPadrao::dispatch($agendamento->id_padrao);
 
-        $agendamento->save();
-        dd($agendamento);
+        //$agendamento->save();
+
+        $ativadores = new Ativadores();
+        if ($tipo_agendamento == 'recorrente') {
+            $dataInicio = new DateTime($inicio);
+            $dataFim    = new DateTime($fim);
+            //dd($dataInicio);
+            $periodo    = new \DatePeriod($dataInicio, new \DateInterval("P1D"), $dataFim);
+            foreach ($periodo as $data) {
+                if (in_array(strtolower($data->format('D')), $dias_semana) !== false) {
+                    //echo strtolower($data->format('D'));
+                    //criar aqui uma inserção em ativadores;
+                }
+                //echo strtolower($data->format('D'));
+                //echo "<br>";
+            }
+        }
+        exit();
+        //$ativadores->data_disparo = $agendamento->
+
+        dd($agendamento);exit();
         echo "<script language='javascript'> window.alert('Compromisso agendado com sucesso!') </script>";
         session_start();
         return redirect()->route('painel');
                
       
+    }
+
+    /**
+     * Verifica se contém status para atualizar.
+     */
+    public function AtualizaStatus()
+    {
+        
     }
 
     /**

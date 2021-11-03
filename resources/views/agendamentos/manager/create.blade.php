@@ -147,19 +147,13 @@
                     </div>
                     <div id="agendamento_manual" class="container" style="display: none">
                         <div class="row">
-                            <div class="col-lg-8">
-                                <label class="labelform mt-2 mb-0">Início:</label>
-                                <input type="date" name="inicio_manual" id="inicio_manual" class="form-control">
+                            <div class="col-lg-4">
+                                <label class="labelform mt-2 mb-0">Data:</label>
+                                <input type="date" name="data" id="data" class="form-control">
                             </div>
                             <div class="col-lg-4">
-                                <label class="labelform mt-2 mb-0">Horario Início:</label>
+                                <label class="labelform mt-2 mb-0">Horário Início:</label>
                                 <input type="time" name="horario_inicio_manual" id="horario_inicio_manual" min="06:00" class="form-control" >
-                            </div>
-                        </div>
-                        <div class="row">                            
-                            <div class="col-lg-8">
-                                <label class="labelform mt-2 mb-0">Fim:</label>
-                                <input type="date" name="fim_manual" id="fim_manual" class="form-control" >
                             </div>
                             <div class="col-lg-4">
                                 <label class="labelform mt-2 mb-0">Tempo de Serviço:</label>
@@ -171,35 +165,37 @@
                         <label class="labelform mt-2 mb-0">Selecione a recorrência:</label>
                         <br>
                         <div class="row">                                
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="segunda" id="segunda" value="segunda">
+                                    <input class="form-check-input" type="checkbox" name="mon" id="segunda" value="segunda">
                                     <label class="form-check-label" for="segunda">Segunda-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="quarta" id="quarta" value="quarta">
-                                    <label class="form-check-label" for="quarta">Quarta-feira</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="sexta" id="sexta" value="sexta">
-                                    <label class="form-check-label" for="sexta">Sexta-feira</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="domingo" id="domingo" value="domingo">
-                                    <label class="form-check-label" for="domingo">Domingo</label>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="terca" id="terca" value="terca">
-                                    <label class="form-check-label" for="terca">Terça-feira</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="quinta" id="quinta" value="quinta">
+                                    <input class="form-check-input" type="checkbox" name="thu" id="quinta" value="quinta">
                                     <label class="form-check-label" for="quinta">Quinta-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="sabado" id="sabado" value="sabado">
+                                    <input class="form-check-input" type="checkbox" name="sun" id="domingo" value="domingo">
+                                    <label class="form-check-label" for="domingo">Domingo</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="tue" id="terca" value="terca">
+                                    <label class="form-check-label" for="terca">Terça-feira</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="fri" id="sexta" value="sexta">
+                                    <label class="form-check-label" for="sexta">Sexta-feira</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="wed" id="quarta" value="quarta">
+                                    <label class="form-check-label" for="quarta">Quarta-feira</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="sat" id="sabado" value="sabado">
                                     <label class="form-check-label" for="sabado">Sábado</label>
                                 </div>
                             </div>

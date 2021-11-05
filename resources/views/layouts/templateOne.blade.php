@@ -41,6 +41,10 @@
         $(function () {
         $('[data-tt="tooltip"]').tooltip()
         })
+        //Exibição de Mensagem ao iniciar
+        $(document).ready(function() {
+          $('#modalmensagem').modal('show');
+        })
     </script>
 </head>
 <body>

@@ -1,7 +1,7 @@
 @extends('layouts.templateOne')
 @section('title', 'Agendar')
 @section('agendamentos_ativo', 'active')
-@section('content')    
+@section('content')
     @include('navbar.managerMenu')
     <div class="m-3">
         <div class="row">
@@ -334,6 +334,24 @@
             </div>
         </form>
     </div>
+    {{----------------------------MODAL P/ MENSAGEM-----------------------------------}}
+    @if(session('mensagem'))
+        <div class='modal fade' id='modalmensagem' tabindex='-1' role='dialog' aria-labelledby='myLargeModalLabel'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header alert-{{ session('cor') }}'>
+                        <p class='modal-title' id='exampleModalLabel'>                            
+                            {{session('mensagem')}}
+                        </p>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    {{---------------------------------FIM MODAL-------------------------------}}
     <script type="text/javascript">
         $("#numitens_servicos").on('change', function(e){
             let numitens = $(e.target).val()

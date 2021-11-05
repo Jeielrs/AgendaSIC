@@ -29,7 +29,7 @@ Route::get('painel', [PainelController::class, 'index']);
 //Route::resource('agendamentos', AgendamentoController::class);
 Route::get('agendamentos', [AgendamentoController::class, 'index'])->name('agendamentos.index');
 Route::get('agendamentos/{id}/show', [AgendamentoController::class, 'show']);
-Route::get('agendamentos/create', [AgendamentoController::class, 'create']);
+Route::get('agendamentos/create', [AgendamentoController::class, 'create'])->name('agendamentos.create');
 Route::get('agendamentos/loadservices', [AgendamentoController::class, 'loadservices'])->name('agendamentos.loadservices');
 Route::get('agendamentos/loadtecnicos', [AgendamentoController::class, 'loadtecnicos'])->name('agendamentos.loadtecnicos');
 Route::get('agendamentos/loadpadroes', [AgendamentoController::class, 'loadpadroes'])->name('agendamentos.loadpadroes');
@@ -37,6 +37,7 @@ Route::get('agendamentos/loadveiculos', [AgendamentoController::class, 'loadveic
 Route::post('agendamentos/create', [AgendamentoController::class, 'insert'])->name('agendamentos.insert');
 Route::post('agendamentos/update', [AgendamentoController::class, 'update'])->name('agendamentos.update');
 Route::get('agendamentos/destroy/{id}', [AgendamentoController::class, 'destroy']);
+Route::get('painel', [AgendamentoController::class, 'painel']);
 
 Route::resource('tecnicos', TecnicoController::class);
 Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos.index');

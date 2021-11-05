@@ -232,88 +232,114 @@ class AgendamentoController extends Controller
             }
         }
 
-        //Verificação dos itens para permissão
-        //$tecnicos = Tecnico::where('situation', 'ativo')->get();
-        //$tecnicos_ativos = array();
-        //$i = 0;
-        //foreach ($tecnicos as $key => $tecnico) {
-        //    $tecnicos_ativos[$i] = $tecnico->id;
-        //    $i++;
-        //}
-        //$padroes = Padrao::where('situation', 'ativo')->get();
-        //$veiculos = Veiculo::where('situation', 'ativo')->get();
+        //TRATATIVAS DE ERROS
+        //pesquisar agora se há registros de agendamentos com o técnico/padrao/veiculo, etc para essa data
+        $conflito_tecnicos = Agendamento::all();
 
-        //dd($tecnicos_ativos);exit();
 
-        //Encaminhamento para variável do BD
-        $agendamento = new Agendamento();
-        $agendamento->inicio = $inicio;
-        $agendamento->fim = $fim;
-        $agendamento->tempo_servico = $tempo_servico;
-        $agendamento->horario_inicio = $horario_inicio;
-        $agendamento->horario_fim = $horario_fim;
-        $agendamento->dias_semana = $dias_semana;
-        $agendamento->tipo_servico = $tipo_servico;
-        $agendamento->tipo_contrato = $tipo_contrato;
-        $agendamento->tipo_agendamento = $tipo_agendamento;
-        $agendamento->compromisso = $compromisso;
-        $agendamento->protocolo = $protocolo;
-        $agendamento->integracao = $integracao;
-        $agendamento->hospedagem = $hospedagem;
-        $agendamento->contato = $contato;
-        $agendamento->numitens_servicos = $numitens_servicos;
-        
-        if (!is_null($agendamento->dias_semana)) {
-            $agendamento->dias_semana = implode("|", $dias_semana);
-        }
-
-        if ($numitens_servicos > 0) {
-            $agendamento->qtd_servicos = implode("|", $array_qtd_servicos);
-            $agendamento->id_servico = implode("|", $array_id_servicos);
-        }
-        $agendamento->numitens_tecnicos = $numitens_tecnicos;
-        if ($numitens_tecnicos > 0) {
-            $agendamento->id_tecnico = implode("|", $array_id_tecnicos);
-        }
-        $agendamento->numitens_padroes = $numitens_padroes;
-        if ($numitens_padroes > 0) {
-            $agendamento->id_padrao = implode("|", $array_id_padroes);
-        }
-        $agendamento->numitens_veiculos = $numitens_veiculos;
-        if ($numitens_veiculos > 0) {
-            $agendamento->id_veiculo = implode("|", $array_id_veiculos);
-        }
-        $agendamento->id_cliente = $id_cliente;
-        $agendamento->obs = $observacao;
-
-        //AtualizaStatusPadrao::dispatch($agendamento->id_padrao);
-
-        //$agendamento->save();
-
-        $ativadores = new Ativadores();
+        //REALIZA O CADASTRO
         if ($tipo_agendamento == 'recorrente') {
             $dataInicio = new DateTime($inicio);
-            $dataFim    = new DateTime($fim);
-            //dd($dataInicio);
+            $dataFim    = new DateTime($fim.'23:59:59');
+            //dd($dataFim);
             $periodo    = new \DatePeriod($dataInicio, new \DateInterval("P1D"), $dataFim);
+            //Aqui só entra o que estiver dentro do período e dias selecionados em ag. recorrente
             foreach ($periodo as $data) {
                 if (in_array(strtolower($data->format('D')), $dias_semana) !== false) {
-                    //echo strtolower($data->format('D'));
-                    //criar aqui uma inserção em ativadores;
-                }
-                //echo strtolower($data->format('D'));
-                //echo "<br>";
+                    
+                    //Encaminhamento para variável do BD
+                    $agendamento = new Agendamento();
+                    $agendamento->data = $data;
+                    $agendamento->tipo_servico = $tipo_servico;
+                    $agendamento->tipo_contrato = $tipo_contrato;
+                    $agendamento->compromisso = $compromisso;
+                    $agendamento->tipo_agendamento = $tipo_agendamento;
+                    $agendamento->inicio = $inicio;
+                    $agendamento->fim = $fim;
+                    $agendamento->tempo_servico = $tempo_servico;
+                    $agendamento->horario_inicio = $horario_inicio;
+                    $agendamento->horario_fim = $horario_fim;
+                    $agendamento->dias_semana = $dias_semana;
+                    $agendamento->protocolo = $protocolo;
+                    $agendamento->integracao = $integracao;
+                    $agendamento->hospedagem = $hospedagem;
+                    $agendamento->contato = $contato;
+                    $agendamento->numitens_servicos = $numitens_servicos;        
+                    if (!is_null($agendamento->dias_semana)) {
+                        $agendamento->dias_semana = implode("|", $dias_semana);
+                    }
+                    if ($numitens_servicos > 0) {
+                        $agendamento->qtd_servicos = implode("|", $array_qtd_servicos);
+                        $agendamento->id_servico = implode("|", $array_id_servicos);
+                    }
+                    $agendamento->numitens_tecnicos = $numitens_tecnicos;
+                    if ($numitens_tecnicos > 0) {
+                        $agendamento->id_tecnico = implode("|", $array_id_tecnicos);
+                    }
+                    $agendamento->numitens_padroes = $numitens_padroes;
+                    if ($numitens_padroes > 0) {
+                        $agendamento->id_padrao = implode("|", $array_id_padroes);
+                    }
+                    $agendamento->numitens_veiculos = $numitens_veiculos;
+                    if ($numitens_veiculos > 0) {
+                        $agendamento->id_veiculo = implode("|", $array_id_veiculos);
+                    }
+                    $agendamento->id_cliente = $id_cliente;
+                    $agendamento->obs = $observacao;
+                    $agendamento->save();
+                }                
             }
-        }
-        exit();
-        //$ativadores->data_disparo = $agendamento->
+            return redirect()
+            ->route('agendamentos.create')
+            ->with('mensagem', 'Compromisso agendado com sucesso!')
+            ->with('cor', 'success');
+        } 
+        else {    //se for agendamento 'manual'
+            $agendamento = new Agendamento();
+            $agendamento->data = $inicio;
+            $agendamento->tipo_servico = $tipo_servico;
+            $agendamento->tipo_contrato = $tipo_contrato;
+            $agendamento->compromisso = $compromisso;
+            $agendamento->tipo_agendamento = $tipo_agendamento;
+            $agendamento->inicio = $inicio;
+            $agendamento->fim = $fim;
+            $agendamento->tempo_servico = $tempo_servico;
+            $agendamento->horario_inicio = $horario_inicio;
+            $agendamento->horario_fim = $horario_fim;
+            $agendamento->protocolo = $protocolo;
+            $agendamento->integracao = $integracao;
+            $agendamento->hospedagem = $hospedagem;
+            $agendamento->contato = $contato;
+            $agendamento->numitens_servicos = $numitens_servicos;        
+            if (!is_null($agendamento->dias_semana)) {
+                $agendamento->dias_semana = implode("|", $dias_semana);
+            }
+            if ($numitens_servicos > 0) {
+                $agendamento->qtd_servicos = implode("|", $array_qtd_servicos);
+                $agendamento->id_servico = implode("|", $array_id_servicos);
+            }
+            $agendamento->numitens_tecnicos = $numitens_tecnicos;
+            if ($numitens_tecnicos > 0) {
+                $agendamento->id_tecnico = implode("|", $array_id_tecnicos);
+            }
+            $agendamento->numitens_padroes = $numitens_padroes;
+            if ($numitens_padroes > 0) {
+                $agendamento->id_padrao = implode("|", $array_id_padroes);
+            }
+            $agendamento->numitens_veiculos = $numitens_veiculos;
+            if ($numitens_veiculos > 0) {
+                $agendamento->id_veiculo = implode("|", $array_id_veiculos);
+            }
+            $agendamento->id_cliente = $id_cliente;
+            $agendamento->obs = $observacao;
+            $agendamento->save();
 
-        dd($agendamento);exit();
-        echo "<script language='javascript'> window.alert('Compromisso agendado com sucesso!') </script>";
-        session_start();
-        return redirect()->route('painel');
-               
-      
+            return redirect()
+            ->route('agendamentos.create')
+            ->with('mensagem', 'Compromisso agendado com sucesso!')
+            ->with('cor', 'success');
+        }
+        //dd($agendamento);exit();      
     }
 
     /**

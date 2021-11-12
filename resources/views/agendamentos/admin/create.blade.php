@@ -1,8 +1,8 @@
 @extends('layouts.templateOne')
 @section('title', 'Agendar')
 @section('agendamentos_ativo', 'active')
-@section('content')    
-    @include('navbar.managerMenu')
+@section('content')
+    @include('navbar.adminMenu')
     <div class="m-3">
         <div class="row">
             <div class="col-md-6">
@@ -167,35 +167,35 @@
                         <div class="row">                                
                             <div class="col-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="segunda" id="segunda" value="segunda">
+                                    <input class="form-check-input" type="checkbox" name="mon" id="segunda" value="segunda">
                                     <label class="form-check-label" for="segunda">Segunda-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="quinta" id="quinta" value="quinta">
+                                    <input class="form-check-input" type="checkbox" name="thu" id="quinta" value="quinta">
                                     <label class="form-check-label" for="quinta">Quinta-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="domingo" id="domingo" value="domingo">
+                                    <input class="form-check-input" type="checkbox" name="sun" id="domingo" value="domingo">
                                     <label class="form-check-label" for="domingo">Domingo</label>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="terca" id="terca" value="terca">
+                                    <input class="form-check-input" type="checkbox" name="tue" id="terca" value="terca">
                                     <label class="form-check-label" for="terca">Terça-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="sexta" id="sexta" value="sexta">
+                                    <input class="form-check-input" type="checkbox" name="fri" id="sexta" value="sexta">
                                     <label class="form-check-label" for="sexta">Sexta-feira</label>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="quarta" id="quarta" value="quarta">
+                                    <input class="form-check-input" type="checkbox" name="wed" id="quarta" value="quarta">
                                     <label class="form-check-label" for="quarta">Quarta-feira</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="sabado" id="sabado" value="sabado">
+                                    <input class="form-check-input" type="checkbox" name="sat" id="sabado" value="sabado">
                                     <label class="form-check-label" for="sabado">Sábado</label>
                                 </div>
                             </div>
@@ -334,6 +334,24 @@
             </div>
         </form>
     </div>
+    {{----------------------------MODAL P/ MENSAGEM-----------------------------------}}
+    @if(session('mensagem'))
+        <div class='modal fade' id='modalmensagem' tabindex='-1' role='dialog' aria-labelledby='myLargeModalLabel'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header alert-{{ session('cor') }}'>
+                        <p class='modal-title' id='exampleModalLabel'>                            
+                            {{session('mensagem')}}
+                        </p>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    {{---------------------------------FIM MODAL-------------------------------}}
     <script type="text/javascript">
         $("#numitens_servicos").on('change', function(e){
             let numitens = $(e.target).val()

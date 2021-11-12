@@ -15,6 +15,7 @@ use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use League\CommonMark\Extension\Attributes\Node\Attributes;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Echo_;
 
@@ -171,24 +172,31 @@ class AgendamentoController extends Controller
         if ($tipo_agendamento == "recorrente") {
             if ($request->mon == "segunda") {
                 $dias_semana[] = 'mon';
+                $nomes_dias_semana[] = 'segunda';
             }
             if ($request->tue == "terca") {
                 $dias_semana[] = 'tue';
+                $nomes_dias_semana[] = 'terca';
             }
             if ($request->wed == "quarta") {
                 $dias_semana[] = 'wed';
+                $nomes_dias_semana[] = 'quarta';
             }
             if ($request->thu == "quinta") {
                 $dias_semana[] = 'thu';
+                $nomes_dias_semana[] = 'quinta';
             }
             if ($request->fri == "sexta") {
                 $dias_semana[] = 'fri';
+                $nomes_dias_semana[] = 'sexta';
             }
             if ($request->sat == "sabado") {
                 $dias_semana[] = 'sat';
+                $nomes_dias_semana[] = 'sabado';
             }
             if ($request->sun == "domingo") {
                 $dias_semana[] = 'sun';
+                $nomes_dias_semana[] = 'domingo';
             }
         }
         //dd($dias_semana);exit();
@@ -239,6 +247,7 @@ class AgendamentoController extends Controller
 
         //REALIZA O CADASTRO
         if ($tipo_agendamento == 'recorrente') {
+            
             $dataInicio = new DateTime($inicio);
             $dataFim    = new DateTime($fim.'23:59:59');
             //dd($dataFim);
@@ -259,30 +268,30 @@ class AgendamentoController extends Controller
                     $agendamento->tempo_servico = $tempo_servico;
                     $agendamento->horario_inicio = $horario_inicio;
                     $agendamento->horario_fim = $horario_fim;
-                    $agendamento->dias_semana = $dias_semana;
+                    $agendamento->dias_semana = $nomes_dias_semana;
                     $agendamento->protocolo = $protocolo;
                     $agendamento->integracao = $integracao;
                     $agendamento->hospedagem = $hospedagem;
                     $agendamento->contato = $contato;
                     $agendamento->numitens_servicos = $numitens_servicos;        
                     if (!is_null($agendamento->dias_semana)) {
-                        $agendamento->dias_semana = implode("|", $dias_semana);
+                        $agendamento->dias_semana = implode(",", $dias_semana);
                     }
                     if ($numitens_servicos > 0) {
-                        $agendamento->qtd_servicos = implode("|", $array_qtd_servicos);
-                        $agendamento->id_servico = implode("|", $array_id_servicos);
+                        $agendamento->qtd_servicos = implode(",", $array_qtd_servicos);
+                        $agendamento->id_servico = implode(",", $array_id_servicos);
                     }
                     $agendamento->numitens_tecnicos = $numitens_tecnicos;
                     if ($numitens_tecnicos > 0) {
-                        $agendamento->id_tecnico = implode("|", $array_id_tecnicos);
+                        $agendamento->id_tecnico = implode(",", $array_id_tecnicos);
                     }
                     $agendamento->numitens_padroes = $numitens_padroes;
                     if ($numitens_padroes > 0) {
-                        $agendamento->id_padrao = implode("|", $array_id_padroes);
+                        $agendamento->id_padrao = implode(",", $array_id_padroes);
                     }
                     $agendamento->numitens_veiculos = $numitens_veiculos;
                     if ($numitens_veiculos > 0) {
-                        $agendamento->id_veiculo = implode("|", $array_id_veiculos);
+                        $agendamento->id_veiculo = implode(",", $array_id_veiculos);
                     }
                     $agendamento->id_cliente = $id_cliente;
                     $agendamento->obs = $observacao;
@@ -340,25 +349,6 @@ class AgendamentoController extends Controller
             ->with('cor', 'success');
         }
         //dd($agendamento);exit();      
-    }
-
-    /**
-     * Verifica se contém status para atualizar.
-     */
-    public function AtualizaStatus()
-    {
-        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

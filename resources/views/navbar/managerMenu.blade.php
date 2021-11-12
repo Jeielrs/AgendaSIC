@@ -8,6 +8,11 @@
     </a>  
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item @yield('calendario_ativo')">
+              <a class="nav-link" href="/calendario" data-tt="tooltip" title="Calendário" ata-placement="right">
+                &nbsp;&nbsp;<i class="fa-regular fa-calendar-days"></i>&nbsp;&nbsp;
+              </a>
+            </li>
             <li class="nav-item @yield('servicos_ativo')">
               <a class="nav-link" href="/servicos">
                 Serviços

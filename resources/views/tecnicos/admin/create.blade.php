@@ -2,7 +2,7 @@
 @section('title', 'Cadastrar Técnicos')
 @section('tecnicos_ativo', 'active')
 @section('content')    
-    @include('navbar.managerMenu')
+    @include('navbar.adminMenu')
     <div class="m-3">
         <div class="row">
             <div class="col-md-6">

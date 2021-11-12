@@ -2,7 +2,7 @@
 @section('title', 'Clientes')
 @section('clientes_ativo', 'active')
 @section('content')
-  @include('navbar.managerMenu')
+  @include('navbar.adminMenu')
   <div class="ml-3 mr-3">
     <div class="row color-clientes">
       <div class="col-md-6">

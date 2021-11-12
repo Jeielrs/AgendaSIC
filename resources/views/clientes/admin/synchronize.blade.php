@@ -2,7 +2,7 @@
 @section('title', 'Sincronizar Clientes')
 @section('clientes_ativo', 'active')
 @section('content')
-    @include('navbar.managerMenu')
+    @include('navbar.adminMenu')
     <script type="text/javascript">
         $(document).ready(function(){
             // exibe o gif na div #carregando

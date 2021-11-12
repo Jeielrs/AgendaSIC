@@ -22,6 +22,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     {{--icones--}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     {{--mascarar numeros--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
@@ -32,6 +33,11 @@
     <script src="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-demo.js') }}"></script>
     <link href="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    {{--FullCalendar--}}
+    <link rel="stylesheet" href="assets/fullcalendar/lib/main.min.css">
+    <script src="{{ URL::asset('assets/fullcalendar/lib/main.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/fullcalendar/lib/locales-all.min.js')}}"></script>
+    {{--Modais, Popover and Tooltip--}}
     <script language="JavaScript">    
         //função do purpose
         $(function () {
@@ -45,6 +51,10 @@
         $(document).ready(function() {
           $('#modalmensagem').modal('show');
         })
+
+        function routeEvents(route) {
+            return document.getElementById('calendar').dataset[route];
+        }
     </script>
 </head>
 <body>

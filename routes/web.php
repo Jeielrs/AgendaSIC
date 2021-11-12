@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\manager\DashboardController as ManagerDashboardController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PadraoController;
 use App\Http\Controllers\PainelController;
@@ -37,7 +38,6 @@ Route::get('agendamentos/loadveiculos', [AgendamentoController::class, 'loadveic
 Route::post('agendamentos/create', [AgendamentoController::class, 'insert'])->name('agendamentos.insert');
 Route::post('agendamentos/update', [AgendamentoController::class, 'update'])->name('agendamentos.update');
 Route::get('agendamentos/destroy/{id}', [AgendamentoController::class, 'destroy']);
-Route::get('painel', [AgendamentoController::class, 'painel']);
 
 Route::resource('tecnicos', TecnicoController::class);
 Route::get('tecnicos', [TecnicoController::class, 'index'])->name('tecnicos.index');
@@ -74,4 +74,8 @@ Route::get('clientes/{id}/show', [ClienteController::class, 'show']);
 Route::get('clientes/synchronize', [ClienteController::class, 'synchronize']);
 Route::get('clientes/sync', [ClienteController::class, 'sync'])->name('clientes.sync');
 Route::resource('clientes', ClienteController::class);
+
+Route::get('calendario', [CalendarioController::class, 'index'])->name('calendario.index');
+Route::get('load-events', [CalendarioController::class, 'loadEvents'])->name('routeLoadEvents');
+
 

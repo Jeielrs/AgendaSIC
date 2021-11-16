@@ -155,7 +155,7 @@ class AgendamentoController extends Controller
         $tipo_servico = $request->tipo_servico;
         $tipo_contrato = $request->tipo_contrato;
         $compromisso = $request->compromisso;
-        $integracao = $request->compromisso;
+        $integracao = $request->integracao;
         $id_cliente = explode(" | ", $request->cliente)[0];
         $contato = $request->contato;
         $observacao = $request->observacao;

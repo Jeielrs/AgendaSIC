@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agendamento;
 use App\Models\Cliente;
 use App\Models\Padrao;
+use App\Models\Servico;
 use App\Models\Tecnico;
 use App\Models\Veiculo;
 use Illuminate\Http\Request;
@@ -68,21 +69,38 @@ class CalendarioController extends Controller
         
         $x = 0; 
         foreach ($agendamentos as $key => $evento) {   
-            $arrayNomesDeTecnicos = array();         
+            //gerando array de tecnicos
+            $arrayNomesDeTecnicos = array();
             $id_tecnicos = explode(',', $evento->id_tecnico);   //transforma as id em array            
             $tecnicos = Tecnico::select("name")->whereIn("id", $id_tecnicos)->get();
             $t = 0;            
             if (count($tecnicos) > 1) {
                 foreach ($tecnicos as $nome) {
                     $arrayNomesDeTecnicos[$t] = $this->firstName($nome->name);
-                    $t++;
-                    
+                    $t++;                    
                 }
             } else {
                 $arrayNomesDeTecnicos[$t] = $this->firstName($tecnicos[0]->name);
             }
+            //gerando array de servicos
+            $arrayServicos = array();
+            $id_servicos = explode(',', $evento->id_servico);
+            $servicos = Servico::select("id", "codigo_servico_omie", "descricao")->whereIn("id", $id_servicos)->get();
+            $s = 0;
             
-                       
+            if (count($servicos) > 1) {
+                foreach ($servicos as $servico) {
+                    $arrayServicos[$s]['id'] = $servico->id;
+                    $arrayServicos[$s]['codigo'] = $servico->codigo_servico_omie;
+                    $arrayServicos[$s]['descricao'] = $servico->descricao;
+                    $t++;
+                }
+            } else {
+                $arrayServicos[$s]['id'] = $servicos[0]->id;
+                $arrayServicos[$s]['codigo'] = $servicos[0]->codigo_servico_omie;
+                $arrayServicos[$s]['descricao'] = $servicos[0]->descricao;
+            }
+            dd($servicos);   
             $nomes_tecnicos = implode (",", $arrayNomesDeTecnicos);   //transforma array de nomes em string
             $nome_cliente = Cliente::where('id', '=', $evento->id_cliente)->first()->nome_fantasia;
             $arrayEventos[$x] = array(
@@ -113,10 +131,12 @@ class CalendarioController extends Controller
                 'numitens_veiculos' => $evento->numitens_veiculos,
                 'id_veiculo' => $evento->id_veiculo,
                 'id_cliente' => $evento->id_cliente,
+                'cliente' => $evento->id_cliente.' | '.$nome_cliente,
                 'obs' => $evento->obs,
                 'created_at' => $evento->created_at,
                 'updated_at' => $evento->updated_at,
                 'alterado_por' => $evento->alterado_por,
+                'color' => $this->colorSelect($evento->compromisso),
             );
             $x++;
         }
@@ -134,6 +154,44 @@ class CalendarioController extends Controller
     public function edit($id)
     {
         //
+    }
+
+    /**
+     **Seleciona a cor de acordo com o compromisso
+     */
+    public function colorSelect($compromisso)
+    {
+        switch ($compromisso) {
+            case 'Confirmado':
+                $color = '#15b800';
+                break;
+
+            case 'Ag. Confirmação':
+                $color = '#0d00ab';
+                break;
+
+            case 'Cancelado':
+                $color = '#ff160e';
+                break;
+
+            case 'Empréstimo':
+                $color = '#ff5fc7';
+                break;
+
+            case 'Férias':
+                $color = '#fffa43';
+                break;
+
+            case 'Outros':
+                $color = '#e6d8ff';
+                break;
+            
+            default:
+                $color = '#ffffff';
+                break;
+        }
+
+        return $color;
     }
 
     /**

@@ -20,12 +20,12 @@
 
     </div>
     
-    <!-- Modal -->
-    <div class="modal fade" id="evento" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <!-- Modal Calendar-->
+    <div class="modal fade" id="modalCalendar" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Novo Agendamento</h5>
+                    <h5 class="modal-title" id="titleModal">Título do modal</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -92,6 +92,7 @@
                                 </div>
                                 <div class="container">
                                     <label class="labelform mt-2 mb-0">Cliente:</label>
+                                    <input type="text" name="cliente_atual" id="cliente_atual" style="color:red;outline:0;font-size:12px; ">
                                     <input type="search" name="cliente" list="cliente" placeholder="Pesquisar clientes..." class="custom-select" required>
                                     <datalist id="cliente">
                                         @foreach ($clientes as $cliente)
@@ -152,6 +153,8 @@
                                 </div>
 
                                 <div class="container">
+                                    <label class="labelform mt-2 mb-0">Data:</label>
+                                    <input type="date" name="data" id="data" class="form-control">
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <label class="labelform mt-2 mb-0">Horário Início:</label>
@@ -262,16 +265,54 @@
                 },
 
                 dateClick: function(){
-                    $("#evento").modal("show");
+                    $("#modalCalendar").modal("show");
+                    $("#modalCalendar #titleModal").text("Novo Agendamento");
+                    $("#modalCalendar button.deleteEvent").css("display", "none");
                 },
-                eventDrop: function(event) {
-                    alert('event drop');
-                },
-                eventClick: function(event) {
-                    alert('event click');
-                },
-                eventResize: function(event) {
-                    alert('event resize');
+                eventClick: function(element) {
+                    $("#modalCalendar").modal("show");
+                    $("#modalCalendar #titleModal").text("Editar Agendamento");
+                    $("#modalCalendar button.deleteEvent").css("display", "flex");
+
+                    console.log(element);
+
+                    let tipo_servico = element.event.extendedProps.tipo_servico;
+                    $("#modalCalendar select[name='tipo_servico']").val(tipo_servico);
+
+                    let tipo_contrato = element.event.extendedProps.tipo_contrato;
+                    $("#modalCalendar select[name='tipo_contrato']").val(tipo_contrato);
+
+                    let compromisso = element.event.extendedProps.compromisso;
+                    $("#modalCalendar select[name='compromisso']").val(compromisso);
+
+                    let integracao = element.event.extendedProps.integracao;
+                    $("#modalCalendar select[name='integracao']").val(integracao);
+
+                    let cliente = element.event.extendedProps.cliente;
+                    $("#modalCalendar input[name='cliente_atual']").val(cliente);
+
+                    let contato = element.event.extendedProps.contato;
+                    $("#modalCalendar input[name='contato']").val(contato);
+
+                    let observacao = element.event.extendedProps.obs;
+                    $("#modalCalendar textarea[name='observacao']").val(observacao);
+
+                    let protocolo = element.event.extendedProps.protocolo;
+                    $("#modalCalendar input[name='protocolo']").val(protocolo);
+
+                    let hospedagem = element.event.extendedProps.hospedagem;
+                    $("#modalCalendar select[name='hospedagem']").val(hospedagem);
+
+                    let start = moment(element.event.start).format("HH:mm");
+                    $("#modalCalendar input[name='horario_inicio_manual']").val(start);
+
+                    let tempo_servico = element.event.extendedProps.tempo_servico;
+                    $("#modalCalendar input[name='tempo_servico_manual']").val(tempo_servico);
+
+                    let data = moment(element.event.start).format("YYYY-MM-DD");
+                    $("#modalCalendar input[name='data']").val(data);
+
+                    
                 },
                 events: routeEvents('routeLoadEvents'),
             });

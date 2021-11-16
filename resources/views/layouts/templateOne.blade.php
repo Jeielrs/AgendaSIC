@@ -34,9 +34,11 @@
     <script src="{{ URL::asset('assets/datatables/datatables-demo.js') }}"></script>
     <link href="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     {{--FullCalendar--}}
-    <link rel="stylesheet" href="assets/fullcalendar/lib/main.min.css">
+    <link href="{{ URL::asset('assets/fullcalendar/lib/main.min.css') }}" rel="stylesheet">
     <script src="{{ URL::asset('assets/fullcalendar/lib/main.min.js')}}"></script>
     <script src="{{ URL::asset('assets/fullcalendar/lib/locales-all.min.js')}}"></script>
+    {{--Moment JS--}}
+    <script src="{{ URL::asset('assets/moment.js/moment.min.js')}}"></script>
     {{--Modais, Popover and Tooltip--}}
     <script language="JavaScript">    
         //função do purpose

@@ -8,9 +8,13 @@ use App\Models\Agendamento;
 use App\Models\Ativadores;
 use App\Models\Cliente;
 use App\Models\Padrao;
+use App\Models\Padroes_agendamento;
 use App\Models\Servico;
+use App\Models\Servicos_agendamento;
 use App\Models\Tecnico;
+use App\Models\Tecnicos_agendamento;
 use App\Models\Veiculo;
+use App\Models\Veiculos_agendamento;
 use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
@@ -61,12 +65,12 @@ class AgendamentoController extends Controller
     public function loadservices(Request $request)
     {
         $servicos = Servico::latest()->get();
-        for ($i=1; $i <= $request->numitens; $i++) {
+        for ($i=0; $i < $request->numitens; $i++) {
             echo
 				'<div id="servico_'.$i.'">
                     <div class="row">
-                        <div class="col-lg-10">
-                            <label class="labelform mt-2 mb-0">'.$i.'º serviço: </label>
+                        <div class="col-lg-9">
+                            <label class="labelform mt-2 mb-0">'.($i+1).'º serviço: </label>
         		  	        <input type="search" name="servico['.$i.']" id="servico_'.$i.'" list="itens_servicos" placeholder="Pesquisar serviços..." class="custom-select" required>
           			        <datalist id="itens_servicos">';
                                 foreach ($servicos as $servico) {
@@ -74,7 +78,7 @@ class AgendamentoController extends Controller
                                 }
             echo            '</datalist>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-3">
                             <label class="labelform mt-2 mb-0">Qtd: </label>
                             <input type="number" name="servico_qtd['.$i.']" min="0" value="1" class="form-control"  required>
                         </div>
@@ -89,10 +93,10 @@ class AgendamentoController extends Controller
     public function loadtecnicos(Request $request)
     {
         $tecnicos = Tecnico::latest()->get();
-        for ($i=1; $i <= $request->numitens; $i++) {
+        for ($i=0; $i < $request->numitens; $i++) {
             echo
 				'<div id="tecnico_'.$i.'">
-                    <label class="labelform mt-2 mb-0">'.$i.'º técnico: </label>
+                    <label class="labelform mt-2 mb-0">'.($i+1).'º técnico: </label>
         		  	<input type="search" name="tecnico['.$i.']" id="tecnico_'.$i.'" list="itens_tecnicos" placeholder="Pesquisar técnicos..." class="custom-select" required>
           			<datalist id="itens_tecnicos">';
                         foreach ($tecnicos as $tecnico) {
@@ -109,10 +113,10 @@ class AgendamentoController extends Controller
     public function loadpadroes(Request $request)
     {
         $padroes = Padrao::latest()->get();
-        for ($i=1; $i <= $request->numitens; $i++) {
+        for ($i=0; $i < $request->numitens; $i++) {
             echo
 				'<div id="padrao_'.$i.'">
-                    <label class="labelform mt-2 mb-0">'.$i.'º padrão: </label>
+                    <label class="labelform mt-2 mb-0">'.($i+1).'º padrão: </label>
         		  	<input type="search" name="padrao['.$i.']" id="padrao_'.$i.'" list="itens_padroes" placeholder="Pesquisar padrões..." class="custom-select" required>
           			<datalist id="itens_padroes">';
                         foreach ($padroes as $padrao) {
@@ -129,10 +133,10 @@ class AgendamentoController extends Controller
     public function loadveiculos(Request $request)
     {
         $veiculos = Veiculo::latest()->get();
-        for ($i=1; $i <= $request->numitens; $i++) {
+        for ($i=0; $i < $request->numitens; $i++) {
             echo
 				'<div id="veiculo_'.$i.'">
-                    <label class="labelform mt-2 mb-0">'.$i.'º veículo: </label>
+                    <label class="labelform mt-2 mb-0">'.($i+1).'º veículo: </label>
         		  	<input type="search" name="veiculo['.$i.']" id="veiculo_'.$i.'" list="itens_veiculos" placeholder="Pesquisar veículos..." class="custom-select" required>
           			<datalist id="itens_veiculos">';
                         foreach ($veiculos as $veiculo) {
@@ -149,9 +153,8 @@ class AgendamentoController extends Controller
     public function insert(StoreAgendamentoRequest $request)
     {
         //dd($request->all());
-        //exit();
 
-        //Atribuição das váriáveis
+    #ATRIBUIÇÃO DAS VARIÁVEIS
         $tipo_servico = $request->tipo_servico;
         $tipo_contrato = $request->tipo_contrato;
         $compromisso = $request->compromisso;
@@ -168,95 +171,91 @@ class AgendamentoController extends Controller
         $tempo_servico = ($tipo_agendamento == "manual")?$request->tempo_servico_manual:$request->tempo_servico_recorrente;
         $v = explode(':', $tempo_servico);
         $horario_fim = date('H:i', strtotime("{$horario_inicio} + {$v[0]} hours {$v[1]} minutes"));
-        //cria a variável $dias da semana que armazena os dias selecionados
-        if ($tipo_agendamento == "recorrente") {
-            if ($request->mon == "segunda") {
-                $dias_semana[] = 'mon';
-                $nomes_dias_semana[] = 'segunda';
+        #CRIA A VARIÁVEL $dias_da_semana
+            if ($tipo_agendamento == "recorrente") {
+                if ($request->mon == "segunda") {
+                    $dias_semana[] = 'mon';
+                    $nomes_dias_semana[] = 'segunda';
+                }
+                if ($request->tue == "terca") {
+                    $dias_semana[] = 'tue';
+                    $nomes_dias_semana[] = 'terca';
+                }
+                if ($request->wed == "quarta") {
+                    $dias_semana[] = 'wed';
+                    $nomes_dias_semana[] = 'quarta';
+                }
+                if ($request->thu == "quinta") {
+                    $dias_semana[] = 'thu';
+                    $nomes_dias_semana[] = 'quinta';
+                }
+                if ($request->fri == "sexta") {
+                    $dias_semana[] = 'fri';
+                    $nomes_dias_semana[] = 'sexta';
+                }
+                if ($request->sat == "sabado") {
+                    $dias_semana[] = 'sat';
+                    $nomes_dias_semana[] = 'sabado';
+                }
+                if ($request->sun == "domingo") {
+                    $dias_semana[] = 'sun';
+                    $nomes_dias_semana[] = 'domingo';
+                }
             }
-            if ($request->tue == "terca") {
-                $dias_semana[] = 'tue';
-                $nomes_dias_semana[] = 'terca';
+        #CRIA ARRAY COM OS SERVICOS ESCOLHIDOS      
+            $array_id_servicos = array();
+            $array_qtd_servicos = array();
+            if (is_null($request->numitens_servicos)) {
+                $numitens_servicos = 0;
+            } else {
+                $numitens_servicos = $request->numitens_servicos;
+                for ($i=0; $i < $numitens_servicos; $i++) {
+                    $array_id_servicos[$i] =  explode(" | ", $request->servico[$i])[0];
+                    $array_qtd_servicos[$i] = $request->servico_qtd[$i];
+                }
             }
-            if ($request->wed == "quarta") {
-                $dias_semana[] = 'wed';
-                $nomes_dias_semana[] = 'quarta';
+        #CRIA ARRAY COM OS TECNICOS ESCOLHIDOS
+            $array_id_tecnicos = array();
+            if (is_null($request->numitens_tecnicos)) {
+                $numitens_tecnicos = 0;
+            } else {
+                $numitens_tecnicos = $request->numitens_tecnicos;
+                for ($i=0; $i < $numitens_tecnicos; $i++) {
+                    $array_id_tecnicos[$i] =  explode(" | ", $request->tecnico[$i])[0];
+                }
             }
-            if ($request->thu == "quinta") {
-                $dias_semana[] = 'thu';
-                $nomes_dias_semana[] = 'quinta';
+        #CRIA ARRAY COM OS PADROES ESCOLHIDOS
+            $array_id_padroes = array();
+            if (is_null($request->numitens_padroes)) {
+                $numitens_padroes = 0;
+            } else {
+                $numitens_padroes = $request->numitens_padroes;
+                for ($i=0; $i < $numitens_padroes; $i++) {
+                    $array_id_padroes[$i] =  explode(" | ", $request->padrao[$i])[0];
+                }
             }
-            if ($request->fri == "sexta") {
-                $dias_semana[] = 'fri';
-                $nomes_dias_semana[] = 'sexta';
+        #CRIA ARRAY COM OS VEICULOS ESCOLHIDOS
+            $array_id_veiculos = array();
+            if (is_null($request->numitens_veiculos)) {
+                $numitens_veiculos = 0;
+            } else {
+                $numitens_veiculos = $request->numitens_veiculos;
+                for ($i=0; $i < $numitens_veiculos; $i++) {
+                    $array_id_veiculos[$i] =  explode(" | ", $request->veiculo[$i])[0];
+                }
             }
-            if ($request->sat == "sabado") {
-                $dias_semana[] = 'sat';
-                $nomes_dias_semana[] = 'sabado';
-            }
-            if ($request->sun == "domingo") {
-                $dias_semana[] = 'sun';
-                $nomes_dias_semana[] = 'domingo';
-            }
-        }
-        //dd($dias_semana);exit();
-
-        $array_id_servicos = array();
-        $array_qtd_servicos = array();
-        if (is_null($request->numitens_servicos)) {
-            $numitens_servicos = 0;
-        } else {
-            $numitens_servicos = $request->numitens_servicos;
-            for ($i=1; $i <= $numitens_servicos; $i++) {
-                $array_id_servicos[$i] =  explode(" | ", $request->servico[$i])[0];
-                $array_qtd_servicos[$i] = $request->servico_qtd[$i];
-            }
-        }
-        $array_id_tecnicos = array();
-        if (is_null($request->numitens_tecnicos)) {
-            $numitens_tecnicos = 0;
-        } else {
-            $numitens_tecnicos = $request->numitens_tecnicos;
-            for ($i=1; $i <= $numitens_tecnicos; $i++) {
-                $array_id_tecnicos[$i] =  explode(" | ", $request->tecnico[$i])[0];
-            }
-        }
-        $array_id_padroes = array();
-        if (is_null($request->numitens_padroes)) {
-            $numitens_padroes = 0;
-        } else {
-            $numitens_padroes = $request->numitens_padroes;
-            for ($i=1; $i <= $numitens_padroes; $i++) {
-                $array_id_padroes[$i] =  explode(" | ", $request->padrao[$i])[0];
-            }
-        }
-        $array_id_veiculos = array();
-        if (is_null($request->numitens_veiculos)) {
-            $numitens_veiculos = 0;
-        } else {
-            $numitens_veiculos = $request->numitens_veiculos;
-            for ($i=1; $i <= $numitens_veiculos; $i++) {
-                $array_id_veiculos[$i] =  explode(" | ", $request->veiculo[$i])[0];
-            }
-        }
-
-        //TRATATIVAS DE ERROS
+    #TRATATIVAS DE ERROS
         //pesquisar agora se há registros de agendamentos com o técnico/padrao/veiculo, etc para essa data
         $conflito_tecnicos = Agendamento::all();
 
 
-        //REALIZA O CADASTRO
-        if ($tipo_agendamento == 'recorrente') {
-            
+    #REALIZA O CADASTRO
+        if ($tipo_agendamento == 'recorrente') {            
             $dataInicio = new DateTime($inicio);
             $dataFim    = new DateTime($fim.'23:59:59');
-            //dd($dataFim);
             $periodo    = new \DatePeriod($dataInicio, new \DateInterval("P1D"), $dataFim);
-            //Aqui só entra o que estiver dentro do período e dias selecionados em ag. recorrente
             foreach ($periodo as $data) {
                 if (in_array(strtolower($data->format('D')), $dias_semana) !== false) {
-                    
-                    //Encaminhamento para variável do BD
                     $agendamento = new Agendamento();
                     $agendamento->data = $data;
                     $agendamento->tipo_servico = $tipo_servico;
@@ -269,40 +268,70 @@ class AgendamentoController extends Controller
                     $agendamento->horario_inicio = $horario_inicio;
                     $agendamento->horario_fim = $horario_fim;
                     $agendamento->dias_semana = $nomes_dias_semana;
+                    if (!is_null($agendamento->dias_semana)) {
+                        $agendamento->dias_semana = implode(",", $dias_semana);
+                    }
                     $agendamento->protocolo = $protocolo;
                     $agendamento->integracao = $integracao;
                     $agendamento->hospedagem = $hospedagem;
                     $agendamento->contato = $contato;
-                    $agendamento->numitens_servicos = $numitens_servicos;        
-                    if (!is_null($agendamento->dias_semana)) {
-                        $agendamento->dias_semana = implode(",", $dias_semana);
-                    }
-                    if ($numitens_servicos > 0) {
-                        $agendamento->qtd_servicos = implode(",", $array_qtd_servicos);
-                        $agendamento->id_servico = implode(",", $array_id_servicos);
-                    }
-                    $agendamento->numitens_tecnicos = $numitens_tecnicos;
-                    if ($numitens_tecnicos > 0) {
-                        $agendamento->id_tecnico = implode(",", $array_id_tecnicos);
-                    }
-                    $agendamento->numitens_padroes = $numitens_padroes;
-                    if ($numitens_padroes > 0) {
-                        $agendamento->id_padrao = implode(",", $array_id_padroes);
-                    }
-                    $agendamento->numitens_veiculos = $numitens_veiculos;
-                    if ($numitens_veiculos > 0) {
-                        $agendamento->id_veiculo = implode(",", $array_id_veiculos);
-                    }
                     $agendamento->id_cliente = $id_cliente;
                     $agendamento->obs = $observacao;
+                #CADASTRA O AGENDAMENTO
                     $agendamento->save();
-                }                
+                #CADASTRA SERVICOS
+                    if ($numitens_servicos > 0) {
+                        $i = 0;
+                        //dd($array_id_servicos);
+                        foreach ($array_id_servicos as $id_servico) {
+                            $servico_agendamento = new Servicos_agendamento();
+                            $servico_agendamento->id_agendamento = $agendamento->id;
+                            $servico_agendamento->id_servico = $id_servico;
+                            $servico_agendamento->qtd = $array_qtd_servicos[$i];
+                            $servico_agendamento->save();
+                            $i++;
+                        }
+                    }
+                #CADASTRA TECNICOS
+                    if ($numitens_tecnicos > 0) {
+                        $i = 0;
+                        foreach ($array_id_tecnicos as $id_tecnico) {
+                            $tecnico_agendamento = new Tecnicos_agendamento();
+                            $tecnico_agendamento->id_agendamento = $agendamento->id;
+                            $tecnico_agendamento->id_tecnico = $id_tecnico;
+                            $tecnico_agendamento->save();
+                            $i++;
+                        }
+                    }
+                #CADASTRA PADROES
+                    if ($numitens_padroes > 0) {
+                        $i = 0;
+                        foreach ($array_id_padroes as $id_padrao) {
+                            $padrao_agendamento = new Padroes_agendamento();
+                            $padrao_agendamento->id_agendamento = $agendamento->id;
+                            $padrao_agendamento->id_padrao = $id_padrao;
+                            $padrao_agendamento->save();
+                            $i++;
+                        }
+                    }
+                #CADASTRA VEICULOS
+                    if ($numitens_veiculos > 0) {
+                        $i = 0;
+                        foreach ($array_id_veiculos as $id_veiculo) {
+                            $veiculo_agendamento = new Veiculos_agendamento();
+                            $veiculo_agendamento->id_agendamento = $agendamento->id;
+                            $veiculo_agendamento->id_veiculo = $id_veiculo;
+                            $veiculo_agendamento->save();
+                            $i++;
+                        }
+                    }
+                }
             }
             return redirect()
             ->route('agendamentos.create')
             ->with('mensagem', 'Compromisso agendado com sucesso!')
             ->with('cor', 'success');
-        } 
+        }
         else {    //se for agendamento 'manual'
             $agendamento = new Agendamento();
             $agendamento->data = $inicio;
@@ -315,40 +344,70 @@ class AgendamentoController extends Controller
             $agendamento->tempo_servico = $tempo_servico;
             $agendamento->horario_inicio = $horario_inicio;
             $agendamento->horario_fim = $horario_fim;
+            if (!is_null($agendamento->dias_semana)) {
+                $agendamento->dias_semana = implode("|", $dias_semana);
+            }
+            dd($agendamento->dias_semana);
             $agendamento->protocolo = $protocolo;
             $agendamento->integracao = $integracao;
             $agendamento->hospedagem = $hospedagem;
             $agendamento->contato = $contato;
-            $agendamento->numitens_servicos = $numitens_servicos;        
-            if (!is_null($agendamento->dias_semana)) {
-                $agendamento->dias_semana = implode("|", $dias_semana);
-            }
-            if ($numitens_servicos > 0) {
-                $agendamento->qtd_servicos = implode("|", $array_qtd_servicos);
-                $agendamento->id_servico = implode("|", $array_id_servicos);
-            }
-            $agendamento->numitens_tecnicos = $numitens_tecnicos;
-            if ($numitens_tecnicos > 0) {
-                $agendamento->id_tecnico = implode("|", $array_id_tecnicos);
-            }
-            $agendamento->numitens_padroes = $numitens_padroes;
-            if ($numitens_padroes > 0) {
-                $agendamento->id_padrao = implode("|", $array_id_padroes);
-            }
-            $agendamento->numitens_veiculos = $numitens_veiculos;
-            if ($numitens_veiculos > 0) {
-                $agendamento->id_veiculo = implode("|", $array_id_veiculos);
-            }
             $agendamento->id_cliente = $id_cliente;
             $agendamento->obs = $observacao;
-            $agendamento->save();
+            #CADASTRA O AGENDAMENTO
+                $agendamento->save();
+            #CADASTRA SERVICOS
+                if ($numitens_servicos > 0) {
+                    $i = 0;
+                    foreach ($array_id_servicos as $id_servico) {
+                        $servico_agendamento = new Servicos_agendamento();
+                        $servico_agendamento->id_agendamento = $agendamento->id;
+                        $servico_agendamento->id_servico = $id_servico;
+                        $servico_agendamento->qtd = $array_qtd_servicos[$i];
+                        $servico_agendamento->save();
+                        $i++;
+                    }
+                }
+            #CADASTRA TECNICOS
+                if ($numitens_tecnicos > 0) {
+                    $i = 0;
+                    foreach ($array_id_tecnicos as $id_tecnico) {
+                        $tecnico_agendamento = new Tecnicos_agendamento();
+                        $tecnico_agendamento->id_agendamento = $agendamento->id;
+                        $tecnico_agendamento->id_tecnico = $id_tecnico;
+                        $tecnico_agendamento->save();
+                        $i++;
+                    }
+                }
+            #CADASTRA PADROES
+                if ($numitens_padroes > 0) {
+                    $i = 0;
+                    foreach ($array_id_padroes as $id_padrao) {
+                        $padrao_agendamento = new Padroes_agendamento();
+                        $padrao_agendamento->id_agendamento = $agendamento->id;
+                        $padrao_agendamento->id_padrao = $id_padrao;
+                        $padrao_agendamento->save();
+                        $i++;
+                    }
+                }
+            #CADASTRA VEICULOS
+                if ($numitens_veiculos > 0) {
+                    $i = 0;
+                    foreach ($array_id_veiculos as $id_veiculo) {
+                        $veiculo_agendamento = new Veiculos_agendamento();
+                        $veiculo_agendamento->id_agendamento = $agendamento->id;
+                        $veiculo_agendamento->id_veiculo = $id_veiculo;
+                        $veiculo_agendamento->save();
+                        $i++;
+                    }
+                }
+
 
             return redirect()
             ->route('agendamentos.create')
             ->with('mensagem', 'Compromisso agendado com sucesso!')
             ->with('cor', 'success');
-        }
-        //dd($agendamento);exit();      
+        }    
     }
 
     /**

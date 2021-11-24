@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Agendamento;
 use App\Models\Cliente;
 use App\Models\Padrao;
+use App\Models\Padroes_agendamento;
 use App\Models\Servico;
+use App\Models\Servicos_agendamento;
 use App\Models\Tecnico;
+use App\Models\Tecnicos_agendamento;
 use App\Models\Veiculo;
+use App\Models\Veiculos_agendamento;
 use Illuminate\Http\Request;
 
 class CalendarioController extends Controller
@@ -62,47 +66,47 @@ class CalendarioController extends Controller
     public function loadEvents()
     {
         
-        $padroes = Padrao::all();
-        $veiculos = Veiculo::all();
-        $agendamentos = Agendamento::all();
+        $agendamentos = Agendamento::orderByDesc('id')->get();
+        //dd($agendamentos);
         $arrayEventos = array();
         
         $x = 0; 
         foreach ($agendamentos as $key => $evento) {   
-            //gerando array de tecnicos
-            $arrayNomesDeTecnicos = array();
-            $id_tecnicos = explode(',', $evento->id_tecnico);   //transforma as id em array            
-            $tecnicos = Tecnico::select("name")->whereIn("id", $id_tecnicos)->get();
-            $t = 0;            
-            if (count($tecnicos) > 1) {
-                foreach ($tecnicos as $nome) {
-                    $arrayNomesDeTecnicos[$t] = $this->firstName($nome->name);
-                    $t++;                    
-                }
-            } else {
-                $arrayNomesDeTecnicos[$t] = $this->firstName($tecnicos[0]->name);
+        #gerando array de tecnicos
+            $tecnicos = Tecnicos_agendamento::leftJoin("tecnicos", function($join){
+                $join->on("tecnicos_agendamentos.id_tecnico", "=", "tecnicos.id");
+            })
+            ->select("tecnicos_agendamentos.id_agendamento", "tecnicos_agendamentos.id_tecnico", "tecnicos.name")
+            ->where("tecnicos_agendamentos.id_agendamento", "=", $evento->id)
+            ->get();
+        #gerando array de servicos
+            $servicos = Servicos_agendamento::leftJoin("servicos", function($join){
+                $join->on("servicos_agendamentos.id_servico", "=", "servicos.id");
+            })
+            ->select("servicos_agendamentos.id_agendamento", "servicos_agendamentos.id_servico", "servicos.codigo_servico_omie", "servicos.descricao", "servicos_agendamentos.qtd")
+            ->where("servicos_agendamentos.id_agendamento", "=", $evento->id)
+            ->get();
+        #gerando array de padroes
+            $padroes = Padroes_agendamento::leftJoin("padroes", function($join){
+                $join->on("padroes_agendamentos.id_padrao", "=", "padroes.id");
+            })
+            ->select("padroes_agendamentos.id_agendamento", "padroes_agendamentos.id_padrao", "padroes.tag", "padroes.description")
+            ->where("padroes_agendamentos.id_agendamento", "=", $evento->id)
+            ->get();
+        #gerando array de veiculos
+            $veiculos = Veiculos_agendamento::leftJoin("veiculos", function($join){
+                $join->on("veiculos_agendamentos.id_veiculo", "=", "veiculos.id");
+            })
+            ->select("veiculos_agendamentos.id_agendamento", "veiculos_agendamentos.id_veiculo", "veiculos.vehicle_plate", "veiculos.brand", "veiculos.model")
+            ->where("veiculos_agendamentos.id_agendamento", "=", $evento->id)
+            ->get();
+        #criando as variaveis $nomes_tecnicos e $nome_cliente p/ exibir no titulo do evento
+            for ($i=0; $i < count($tecnicos); $i++) { 
+                $arrayNomesTecnicos[$i] = $tecnicos[$i]->name;
             }
-            //gerando array de servicos
-            $arrayServicos = array();
-            $id_servicos = explode(',', $evento->id_servico);
-            $servicos = Servico::select("id", "codigo_servico_omie", "descricao")->whereIn("id", $id_servicos)->get();
-            $s = 0;
-            
-            if (count($servicos) > 1) {
-                foreach ($servicos as $servico) {
-                    $arrayServicos[$s]['id'] = $servico->id;
-                    $arrayServicos[$s]['codigo'] = $servico->codigo_servico_omie;
-                    $arrayServicos[$s]['descricao'] = $servico->descricao;
-                    $t++;
-                }
-            } else {
-                $arrayServicos[$s]['id'] = $servicos[0]->id;
-                $arrayServicos[$s]['codigo'] = $servicos[0]->codigo_servico_omie;
-                $arrayServicos[$s]['descricao'] = $servicos[0]->descricao;
-            }
-            dd($servicos);   
-            $nomes_tecnicos = implode (",", $arrayNomesDeTecnicos);   //transforma array de nomes em string
+            $nomes_tecnicos = implode(", ", $arrayNomesTecnicos);   //transforma array de nomes em string
             $nome_cliente = Cliente::where('id', '=', $evento->id_cliente)->first()->nome_fantasia;
+        #criando array de eventos
             $arrayEventos[$x] = array(
                 'id' => $evento->id,
                 'title' => $nomes_tecnicos.' | '.$nome_cliente,
@@ -121,27 +125,20 @@ class CalendarioController extends Controller
                 'integracao' => $evento->integracao,
                 'hospedagem' => $evento->hospedagem,
                 'contato' => $evento->contato,
-                'numitens_servicos' => $evento->numitens_servicos,
-                'qtd_servicos' => $evento->qtd_servicos,
-                'id_servico' => $evento->id_servico,
-                'numitens_tecnicos' => $evento->numitens_tecnicos,
-                'id_tecnico' => $evento->id_tecnico,
-                'numitens_padroes' => $evento->numitens_padroes,
-                'id_padrao' => $evento->id_padrao,
-                'numitens_veiculos' => $evento->numitens_veiculos,
-                'id_veiculo' => $evento->id_veiculo,
-                'id_cliente' => $evento->id_cliente,
-                'cliente' => $evento->id_cliente.' | '.$nome_cliente,
+                'array_servicos' => $servicos,
+                'array_tecnicos' =>$tecnicos,
+                'array_padroes' =>$padroes,
+                'array_veiculos' =>$veiculos,
+                'cliente' => $nome_cliente,
                 'obs' => $evento->obs,
                 'created_at' => $evento->created_at,
                 'updated_at' => $evento->updated_at,
                 'alterado_por' => $evento->alterado_por,
                 'color' => $this->colorSelect($evento->compromisso),
             );
+        #
             $x++;
-        }
-        //dd($arrayEventos);
-        //echo "<pre>" . print_r($events[1], true);
+        } //end foreach
         return response()->json($arrayEventos);
     }
 
@@ -215,13 +212,52 @@ class CalendarioController extends Controller
 	}
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Exclui um servico de um agendamento.
+     * @param  str  $codigos
      */
-    public function destroy($id)
+    public function excluirServico($codigos)
     {
-        //
+        $id_agendamento = explode('|', $codigos)[0];    //id do agendamento
+        $id_servico = explode('|', $codigos)[1];    //id do servico a ser excluido
+        //$codigoServico = $codigoServico[0]->codigo_servico_omie;
+        Servicos_agendamento::where('id_agendamento', '=', $id_agendamento)
+        ->where('id_servico', '=', $id_servico)->delete();
     }
+
+    /**
+     * Exclui um tecnico de um agendamento.
+     * @param  str  $codigos
+     */
+    public function excluirTecnico($codigos)
+    {
+        $id_agendamento = explode('|', $codigos)[0];    //id do agendamento
+        $id_tecnico = explode('|', $codigos)[1];    //id do tecnico a ser excluido
+        Tecnicos_agendamento::where('id_agendamento', '=', $id_agendamento)
+        ->where('id_tecnico', '=', $id_tecnico)->delete();
+    }
+
+    /**
+     * Exclui um padrao de um agendamento.
+     * @param  str  $codigos
+     */
+    public function excluirPadrao($codigos)
+    {
+        $id_agendamento = explode('|', $codigos)[0];    //id do agendamento
+        $id_padrao = explode('|', $codigos)[1];    //id do padrao a ser excluido
+        Padroes_agendamento::where('id_agendamento', '=', $id_agendamento)
+        ->where('id_padrao', '=', $id_padrao)->delete();
+    }
+
+    /**
+     * Exclui um veiculo de um agendamento.
+     * @param  str  $codigos
+     */
+    public function excluirVeiculo($codigos)
+    {
+        $id_agendamento = explode('|', $codigos)[0];    //id do agendamento
+        $id_veiculo = explode('|', $codigos)[1];    //id do veiculo a ser excluido
+        Veiculos_agendamento::where('id_agendamento', '=', $id_agendamento)
+        ->where('id_veiculo', '=', $id_veiculo)->delete();
+    }
+
 }

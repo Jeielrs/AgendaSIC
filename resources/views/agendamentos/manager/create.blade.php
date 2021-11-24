@@ -27,7 +27,7 @@
             @csrf
             <div class="row form-group">
                 <div class="col-lg-6">
-                    <div class="container">
+                    <div class="container bg-light mt-2 pb-2 rounded">
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Tipo de Serviço:</label>
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container">
+                    <div class="container bg-light mt-2 pb-2 rounded">
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Compromisso:</label>
@@ -73,7 +73,7 @@
                             </div>
                         </div>                        
                     </div>
-                    <div class="container">
+                    <div class="container bg-light mt-2 pb-2 rounded">
                         <div class="row">
                             <div class="col-lg-9">
                                 <label class="labelform mt-2 mb-0">Cliente:</label>
@@ -91,11 +91,11 @@
                         </div>                        
                     </div>
                     
-                    <div id="servicos">
-                        <div class="container" id="pergunta_servicos">
+                    <div id="servicos" class="container bg-light mt-2 pb-2 rounded">
+                        <div class="container">
                             <label class="labelform mt-2 mb-0">Serviços:</label>
-                            <div id="form" class="row">
-                                <div class="col-8">
+                            <div id="pergunta_servicos" class="row">
+                                <div class="col-9">
                                     <label class='labelform mt-2 mb-0 text-start'>Quantos serviços diferentes deseja adicionar?</label>
                                 </div>
                                 <div class="col-2">
@@ -113,14 +113,14 @@
                         </div>
                         <div class="container" id="content_servicos"></div>
                     </div>                    
-                    <div class="container">
+                    <div class="container bg-light mt-2 mb-2 rounded">
                         <label class="labelform mt-2 mb-0">Observação:</label>
                         <textarea name="observacao" rows="1" class="form-control" pattern="[a-zA-Z0-9]+"></textarea>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="container">
+                    <div class="container bg-light mt-2 pb-2 rounded">
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="labelform mt-2 mb-0">Protocolo:</label>
@@ -137,7 +137,7 @@
                             </div>
                         </div>                        
                     </div>
-                    <div class="container">
+                    <div class="container bg-light mt-2 pb-2 rounded">
                         <label class="labelform mt-2 mb-0">Tipo de Agendamento:</label>
                         <select name="tipo_agendamento" id="tipo_agendamento" class="form-control">
                             <option selected>Selecionar</option>
@@ -145,7 +145,7 @@
                             <option value="recorrente">Recorrente</option>
                         </select>
                     </div>
-                    <div id="agendamento_manual" class="container" style="display: none">
+                    <div id="agendamento_manual" class="container bg-light mt-2 pb-2 rounded" style="display: none">
                         <div class="row">
                             <div class="col-lg-4">
                                 <label class="labelform mt-2 mb-0">Data:</label>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="agendamento_recorrente" class="container" style="display: none">
+                    <div id="agendamento_recorrente" class="container bg-light mt-2 pb-2 rounded" style="display: none">
                         <label class="labelform mt-2 mb-0">Selecione a recorrência:</label>
                         <br>
                         <div class="row">                                
@@ -259,11 +259,11 @@
                         });
                     </script>
 
-                    <div id="tecnicos">
-                        <div class="container" id="pergunta_tecnicos">
+                    <div id="tecnicos" class="container bg-light mt-2 pb-2 rounded">
+                        <div class="container">
                             <label class="labelform mt-2 mb-0">Técnicos:</label>
-                            <div id="form" class="row">
-                                <div class="col-8">
+                            <div id="pergunta_tecnicos" class="row">
+                                <div class="col-9">
                                     <label class='labelform mt-2 mb-0 text-start'>Quantos técnicos diferentes deseja adicionar?</label>
                                 </div>
                                 <div class="col-2">
@@ -281,11 +281,11 @@
                         </div>
                         <div class="container" id="content_tecnicos"></div>
                     </div>
-                    <div id="padroes">
-                        <div class="container" id="pergunta_padroes">
+                    <div id="padroes" class="container bg-light mt-2 pb-2 rounded">
+                        <div class="container" >
                             <label class="labelform mt-2 mb-0">Padrões:</label>
-                            <div id="form" class="row">
-                                <div class="col-8">
+                            <div id="pergunta_padroes" class="row">
+                                <div class="col-9">
                                     <label class='labelform mt-2 mb-0 text-start'>Quantos padrões diferentes deseja adicionar?</label>
                                 </div>
                                 <div class="col-2">
@@ -303,11 +303,11 @@
                         </div>
                         <div class="container" id="content_padroes"></div>
                     </div>
-                    <div id="veiculos">
-                        <div class="container" id="pergunta_veiculos">
+                    <div id="veiculos" class="container bg-light mt-2 pb-2 rounded">
+                        <div class="container">
                             <label class="labelform mt-2 mb-0">Veículos:</label>
-                            <div id="form" class="row">
-                                <div class="col-8">
+                            <div id="pergunta_veiculos" class="row">
+                                <div class="col-9">
                                     <label class='labelform mt-2 mb-0 text-start'>Quantos veículos diferentes deseja adicionar?</label>
                                 </div>
                                 <div class="col-2">
@@ -378,10 +378,7 @@
             .always(function(){
                 $("#loading_servicos").hide();
             });
-        });        
-    </script>
-
-    <script type="text/javascript">
+        });
         $("#numitens_padroes").on('change', function(e){
             let numitens = $(e.target).val()
             $("#pergunta_padroes").hide();
@@ -408,9 +405,6 @@
                 $("#loading_padroes").hide();
             });
         });
-    </script>
-
-    <script type="text/javascript">
         $("#numitens_tecnicos").on('change', function(e){
             let numitens = $(e.target).val()
             $("#pergunta_tecnicos").hide();
@@ -437,35 +431,32 @@
                 $("#loading_tecnicos").hide();
             });
         });
-    </script>
-
-<script type="text/javascript">
-    $("#numitens_veiculos").on('change', function(e){
-        let numitens = $(e.target).val()
-        $("#pergunta_veiculos").hide();
-        console.log('fechou');
-        e.preventDefault();  //->ativado pois evita o comportamento padrão
-        $("#loading_veiculos").show(); // exibe o loading na div #carregando
-        //iniciando a requisição Ajax
-        $("#numeroitens_veiculos").attr('value', numitens) //atribui o value de numitens no input hidden do form
-        console.log($('#numeroitens_veiculos')[0]['value']);
-        $.ajax({
-            type: 'GET',
-            url: '{{ route('agendamentos.loadveiculos') }}',
-            data:`numitens=${numitens}`,
-            dataType: "html"        
-        })
-        .done(function(data){
-            $("#content_veiculos").html(data);
-            console.log('carregado');
-        })
-        .fail(function(data){
-            alert("Erro na requisição Ajax");
-        })
-        .always(function(){
-            $("#loading_veiculos").hide();
+        $("#numitens_veiculos").on('change', function(e){
+            let numitens = $(e.target).val()
+            $("#pergunta_veiculos").hide();
+            console.log('fechou');
+            e.preventDefault();  //->ativado pois evita o comportamento padrão
+            $("#loading_veiculos").show(); // exibe o loading na div #carregando
+            //iniciando a requisição Ajax
+            $("#numeroitens_veiculos").attr('value', numitens) //atribui o value de numitens no input hidden do form
+            console.log($('#numeroitens_veiculos')[0]['value']);
+            $.ajax({
+                type: 'GET',
+                url: '{{ route('agendamentos.loadveiculos') }}',
+                data:`numitens=${numitens}`,
+                dataType: "html"        
+            })
+            .done(function(data){
+                $("#content_veiculos").html(data);
+                console.log('carregado');
+            })
+            .fail(function(data){
+                alert("Erro na requisição Ajax");
+            })
+            .always(function(){
+                $("#loading_veiculos").hide();
+            });
         });
-    });
-</script>
+    </script>
     
 @endsection

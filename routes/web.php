@@ -77,5 +77,9 @@ Route::resource('clientes', ClienteController::class);
 
 Route::get('calendario', [CalendarioController::class, 'index'])->name('calendario.index');
 Route::get('load-events', [CalendarioController::class, 'loadEvents'])->name('routeLoadEvents');
+Route::get('calendario/excluirServico/{codigos}', [CalendarioController::class, 'excluirServico']);
+Route::get('calendario/excluirTecnico/{codigos}', [CalendarioController::class, 'excluirTecnico']);
+Route::get('calendario/excluirPadrao/{codigos}', [CalendarioController::class, 'excluirPadrao']);
+Route::get('calendario/excluirVeiculo/{codigos}', [CalendarioController::class, 'excluirVeiculo']);
 
 

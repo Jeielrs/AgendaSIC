@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     {{--fontes--}}
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Condensed&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
     {{--moment js--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
     {{--tailwindcss--}}
@@ -39,6 +41,8 @@
     <script src="{{ URL::asset('assets/fullcalendar/lib/locales-all.min.js')}}"></script>
     {{--Moment JS--}}
     <script src="{{ URL::asset('assets/moment.js/moment.min.js')}}"></script>
+    {{--jQuery Mask--}}
+    <script src="{{ URL::asset('assets/jQuery-Mask/dist/jquery.mask.min.js')}}"></script>
     {{--Modais, Popover and Tooltip--}}
     <script language="JavaScript">    
         //função do purpose
@@ -52,11 +56,19 @@
         //Exibição de Mensagem ao iniciar
         $(document).ready(function() {
           $('#modalmensagem').modal('show');
-        })
+        });
+        
 
         function routeEvents(route) {
             return document.getElementById('calendar').dataset[route];
         }
+
+        $.ajaxSetup({ //sem isso aqui o ajax nao funciona no laravel
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
     </script>
 </head>
 <body>

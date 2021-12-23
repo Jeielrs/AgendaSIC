@@ -246,7 +246,17 @@ class AgendamentoController extends Controller
             }
     #TRATATIVAS DE ERROS
         //pesquisar agora se há registros de agendamentos com o técnico/padrao/veiculo, etc para essa data
-        $conflito_tecnicos = Agendamento::all();
+        SELECT * FROM agendamentos as A inner join padroes_agendamentos P on A.id = P.id_agendamento inner join veiculos_agendamentos V on A.id = V.id_agendamento inner join  tecnicos_agendamentos T on A.id = T.id 
+
+        //switch ($problem) {
+        //    case 'value':
+        //        # code...
+        //        break;
+        //    
+        //    default:
+        //        # code...
+        //        break;
+        //}
 
 
     #REALIZA O CADASTRO
@@ -344,16 +354,14 @@ class AgendamentoController extends Controller
             $agendamento->tempo_servico = $tempo_servico;
             $agendamento->horario_inicio = $horario_inicio;
             $agendamento->horario_fim = $horario_fim;
-            if (!is_null($agendamento->dias_semana)) {
-                $agendamento->dias_semana = implode("|", $dias_semana);
-            }
-            dd($agendamento->dias_semana);
             $agendamento->protocolo = $protocolo;
             $agendamento->integracao = $integracao;
             $agendamento->hospedagem = $hospedagem;
             $agendamento->contato = $contato;
             $agendamento->id_cliente = $id_cliente;
             $agendamento->obs = $observacao;
+
+            dd($agendamento);
             #CADASTRA O AGENDAMENTO
                 $agendamento->save();
             #CADASTRA SERVICOS
@@ -411,26 +419,78 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
+     * Atualiza um agendamento
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $agendamento = Agendamento::where('id', $request->id)->first();
+        $agendamento->tipo_servico = $request->tipo_servico;
+        $agendamento->tipo_contrato = $request->tipo_contrato;
+        $agendamento->compromisso = $request->compromisso;
+        $agendamento->integracao = $request->integracao;
+        $agendamento->id_cliente = ($request->cliente)?explode(' | ',$request->cliente)[0]:$agendamento->id_cliente;
+        $agendamento->contato = $request->contato;
+        $agendamento->obs = $request->observacao;
+        $agendamento->protocolo = $request->protocolo;
+        $agendamento->hospedagem = $request->hospedagem;
+        $agendamento->data = $request->data;
+        $agendamento->horario_inicio = $request->horario_inicio;
+        $v = explode(':', $request->tempo_servico);
+        $agendamento->horario_fim = date('H:i', strtotime("{$request->horario_inicio} + {$v[0]} hours {$v[1]} minutes"));
+        $agendamento->tempo_servico = $request->tempo_servico;
+        //dd($agendamento);
+        if ($agendamento->save()){
+            echo "Atualizado com sucesso!";
+        } else {
+            echo "Erro ao atualizar, contate o suporte";
+        }
+        #CADASTRA SERVICOS
+            if (!is_null($request->servicos)) {
+                $num_servicos = count($request->servicos['id_servico']);
+                for ($i=0; $i < $num_servicos; $i++) {
+                    $id_servico = explode(' | ', $request->servicos['id_servico'][$i])[0];
+                    $servico_agendamento = new Servicos_agendamento();
+                    $servico_agendamento->id_agendamento = $agendamento->id;
+                    $servico_agendamento->id_servico = $id_servico;
+                    $servico_agendamento->qtd = $request->servicos['qtd'][$i];;
+                    $servico_agendamento->save();   
+                }
+            }
+        #CADASTRA TECNICOS
+            if (!is_null($request->tecnicos)) {
+                $num_tecnicos = count($request->tecnicos['id_tecnico']);
+                for ($i=0; $i < $num_tecnicos; $i++) { 
+                    $id_tecnico = explode(' | ', $request->tecnicos['id_tecnico'][$i])[0];
+                    $tecnico_agendamento = new Tecnicos_agendamento();
+                    $tecnico_agendamento->id_agendamento = $agendamento->id;
+                    $tecnico_agendamento->id_tecnico = $id_tecnico;
+                    $tecnico_agendamento->save();
+                }
+            }
+        #CADASTRA PADROES
+            if (!is_null($request->padroes)) {
+                $num_padroes = count($request->padroes['id_padrao']);
+                for ($i=0; $i < $num_padroes; $i++) { 
+                    $id_padrao = explode(' | ', $request->padroes['id_padrao'][$i])[0];
+                    $padrao_agendamento = new Padroes_agendamento();
+                    $padrao_agendamento->id_agendamento = $agendamento->id;
+                    $padrao_agendamento->id_padrao = $id_padrao;
+                    $padrao_agendamento->save();
+                }
+            }
+        #CADASTRA VEICULOS
+            if (!is_null($request->veiculos)) {
+                $num_veiculos = count($request->veiculos['id_veiculo']);
+                for ($i=0; $i < $num_veiculos; $i++) { 
+                    $id_veiculo = explode(' | ', $request->veiculos['id_veiculo'][$i])[0];
+                    $veiculo_agendamento = new Veiculos_agendamento();
+                    $veiculo_agendamento->id_agendamento = $agendamento->id;
+                    $veiculo_agendamento->id_veiculo = $id_veiculo;
+                    $veiculo_agendamento->save();
+                }
+            }
+        #
     }
 
     /**

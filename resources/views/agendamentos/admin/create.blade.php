@@ -3,10 +3,10 @@
 @section('agendamentos_ativo', 'active')
 @section('content')
     @include('navbar.adminMenu')
-    <div class="m-3">
-        <div class="row">
+    <div class="ml-3 mr-3">
+        <div class="row color-agendamentos">
             <div class="col-md-6">
-              <h3 class="titulo-rota">Agendamentos > Agendar</h3>
+              <h3 class="titulo-rota mt-2">Agendamentos > Agendar</h3>
             </div>
             <div class="col-md-6 text-right">
               

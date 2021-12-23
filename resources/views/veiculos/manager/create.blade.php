@@ -3,10 +3,10 @@
 @section('veiculos_ativo', 'active')
 @section('content')
     @include('navbar.managerMenu')
-    <div class="m-3">
-        <div class="row">
+    <div class="ml-3 mr-3">
+        <div class="row color-veiculos">
             <div class="col-md-6">
-              <h3 class="titulo-rota">Veículos > Cadastro</h3>
+              <h3 class="titulo-rota mt-2">Veículos > Cadastro</h3>
             </div>
             <div class="col-md-6 text-right">
               

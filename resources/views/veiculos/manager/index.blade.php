@@ -400,6 +400,11 @@
                         //$('#action_button').val('Edit');
                         $('#action').val('Edit');
                         $('#editModal').modal('show');
+                        //Atualiza a página pai ao fechar ou clicar fora do modal
+                          $('#editModal').on('hidden.bs.modal', function () {  
+                              location.reload();  
+                          });
+                        //
                     }
                 })
             });

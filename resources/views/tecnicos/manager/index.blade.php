@@ -459,6 +459,11 @@
             $('#hidden_id').val(id);
             $('#action').val('Edit');
             $('#editModal').modal('show');
+            //Atualiza a página pai ao fechar ou clicar fora do modal
+              $('#editModal').on('hidden.bs.modal', function () {  
+                  location.reload();  
+              });
+            //
           }
         })
       });
@@ -524,5 +529,6 @@
 	    }
 	    return str.charAt(0).toUpperCase() + str.substr(1);
     }
+    
   </script>
 @endsection

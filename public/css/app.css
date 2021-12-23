@@ -41,6 +41,10 @@ h3.titulo-rota {
 	background-color: #f0ff18e8;
 }
 
+.color-agendamentos {
+	background-color: #1af1cef1;
+}
+
 .modal-view {
 	padding-bottom: 1px;
 	color: rgb(255, 255, 255);
@@ -142,4 +146,18 @@ h3.titulo-rota {
 	#numitens_veiculos {
 		transform: translateX(-70px);
 	}
+}
+
+/*FORMULARIO*/
+
+.labelform{
+	color: rgb(59, 58, 3);
+	font-family: 'Righteous', cursive;
+	font-size: 13pt;
+}
+
+.label{
+	color: rgb(39, 39, 39);
+	font-family: 'Righteous', cursive;
+	font-size: 11pt;
 }

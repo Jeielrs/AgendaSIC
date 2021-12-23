@@ -43,69 +43,68 @@
         <div class="modal-body">
           <form method="POST" id="edit_form" enctype="multipart/form-data" class="form-horizontal">
             @csrf
-            <div class="row form-group">
-              <div class="col-lg-6">
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">TAG:</label>
-                  <input type="text" name="tag" id="edit_tag" class="form-control" required>
-                </div>
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Setor:</label>
-                  <select name="sector" id="edit_sector" class="form-control" required>
-                    <option selected>Escolher</option>
-                    <option value="LIN">LIN</option>
-                    <option value="SIC/LAW">SIC/LAW</option>
-                    <option value="LEX">LEX</option>
-                  </select>
-                </div>
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Freq. Calibração:</label>
-                  <div class="row">
-                    <div class="col-7">
-                      <input type="number" min="1" name="calibration_frequency"  id="edit_calibration_frequency" class="form-control" required>
-                    </div>
-                    <div class="col-3">
-                      <p class="mt-2" style="margin-right: 8px;">Meses</p>
+            <div class="container">
+              <div class="row form-group">
+                <div class="col-lg-6">
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">TAG:</label>
+                    <input type="text" name="tag" id="edit_tag" class="form-control" required>
+                  </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Setor:</label>
+                    <select name="sector" id="edit_sector" class="form-control" required>
+                      <option selected>Escolher</option>
+                      <option value="LIN">LIN</option>
+                      <option value="SIC/LAW">SIC/LAW</option>
+                      <option value="LEX">LEX</option>
+                    </select>
+                  </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Freq. Calibração:</label>
+                    <div class="row">
+                      <div class="col-3">
+                        <input type="number" min="1" name="calibration_frequency"  id="edit_calibration_frequency" class="form-control" required>
+                      </div>
+                      <div class="col-3">
+                        <p class="mt-2" style="margin-left: -20px;">Meses</p>
+                      </div>
                     </div>
                   </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Descrição:</label>
+                    <textarea class="form-control" name="description" id="edit_description" rows="1" pattern="[a-zA-Z0-9]+" required></textarea>
+                  </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Particularidade:</label>
+                    <textarea class="form-control" name="particularity" id="edit_particularity" rows="1" pattern="[a-zA-Z0-9]+"></textarea>
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-3">                   
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Data da Calibração:</label>
-                  <input type="date" name="calibration_date" id="edit_calibration_date" class="form-control" required>
+                <div class="col-lg-6">                   
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Data da Calibração:</label>
+                    <input type="date" name="calibration_date" id="edit_calibration_date" class="form-control" required>
+                  </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Validade da Calibração:</label>
+                    <input type="date" name="calibration_validity" id="edit_calibration_validity" class="form-control" required>
+                  </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Situação:</label>
+                    <select name="situation" id="edit_situation" class="form-control" required>
+                      <option selected>Escolher</option>
+                      <option value="ativo">Ativo</option>
+                      <option value="inativo">Inativo</option>
+                      <option value="manutencao">Em manutenção</option>
+                    </select>
+                  </div>
+                  <div class="container">
+                    <label class="labelform mt-2 mb-0">Observação:</label>
+                    <textarea class="form-control" name="obs" id="edit_obs" rows="1" pattern="[a-zA-Z0-9]+"></textarea>
+                  </div>
                 </div>
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Validade da Calibração:</label>
-                  <input type="date" name="calibration_validity" id="edit_calibration_validity" class="form-control" required>
-                </div>
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Situação:</label>
-                  <select name="situation" id="edit_situation" class="form-control" required>
-                    <option selected>Escolher</option>
-                    <option value="ativo">Ativo</option>
-                    <option value="inativo">Inativo</option>
-                    <option value="manutencao">Em manutenção</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-7">
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Descrição:</label>
-                  <textarea class="form-control" name="description" id="edit_description" rows="1" pattern="[a-zA-Z0-9]+" required></textarea>
-                </div>
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Particularidade:</label>
-                  <textarea class="form-control" name="particularity" id="edit_particularity" rows="1" pattern="[a-zA-Z0-9]+"></textarea>
-                </div>
-                <div class="container">
-                  <label class="labelform mt-2 mb-0">Observação:</label>
-                  <textarea class="form-control" name="obs" id="edit_obs" rows="1" pattern="[a-zA-Z0-9]+"></textarea>
-                </div>
-              </div>
-              <br />
-              <span class="text-center" id="form_result"></span>
-              <div class="form-group" align="center">
+              </div>              
+              <div class="container" align="center">
+                <span class="text-center" id="form_result"></span>
                 <input type="hidden" name="action" id="action" value="Add" />
                 <input type="hidden" name="hidden_id" id="hidden_id" />
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -365,6 +364,11 @@
             //$('#action_button').val('Edit');
             $('#action').val('Edit');
             $('#editModal').modal('show');
+            //Atualiza a página pai ao fechar ou clicar fora do modal
+              $('#editModal').on('hidden.bs.modal', function () {  
+                  location.reload();  
+              });
+            //
           }
         })
       });

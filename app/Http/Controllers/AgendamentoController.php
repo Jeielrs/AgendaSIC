@@ -246,7 +246,7 @@ class AgendamentoController extends Controller
             }
     #TRATATIVAS DE ERROS
         //pesquisar agora se há registros de agendamentos com o técnico/padrao/veiculo, etc para essa data
-        SELECT * FROM agendamentos as A inner join padroes_agendamentos P on A.id = P.id_agendamento inner join veiculos_agendamentos V on A.id = V.id_agendamento inner join  tecnicos_agendamentos T on A.id = T.id 
+        //SELECT * FROM agendamentos as A inner join padroes_agendamentos P on A.id = P.id_agendamento inner join veiculos_agendamentos V on A.id = V.id_agendamento inner join  tecnicos_agendamentos T on A.id = T.id 
 
         //switch ($problem) {
         //    case 'value':
